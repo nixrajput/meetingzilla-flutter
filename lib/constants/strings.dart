@@ -69,7 +69,7 @@ const MIC = 'Mic';
 const VIDEO = 'Video';
 const AUDIO = 'Audio';
 const MEETING_TYPE = 'Meeting Type';
-const CONFERENCING = 'CONFERENCING';
+const CONFERENCE = 'CONFERENCE';
 const CLASSROOM = 'CLASSROOM';
 
 // FIREBASE CONSTANTS
