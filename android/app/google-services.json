@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "372793497352",
+    "firebase_url": "https://meeting-zilla.firebaseio.com",
+    "project_id": "meeting-zilla",
+    "storage_bucket": "meeting-zilla.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372793497352:android:e9c3c9a6cbdb10b855bebd",
+        "android_client_info": {
+          "package_name": "com.nixlab.meetingzilla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372793497352-cqcd6muvbn53q9duprvkgmqgkbsaes1c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nixlab.meetingzilla",
+            "certificate_hash": "e2dd68ab653e20226efe09241efdf8ddc5d74437"
+          }
+        },
+        {
+          "client_id": "372793497352-efa8cuhkognivtkidcp3vp9tmh6mg9l1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwI_pzODhEPAJtiU49sIKTHpcybdriQ-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372793497352-efa8cuhkognivtkidcp3vp9tmh6mg9l1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
