@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/participants.dart';
+import 'package:meetingzilla/pages/participants_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/widgets/bottom_bar_btn.dart';
 import 'package:meetingzilla/widgets/custom_icon_btn.dart';

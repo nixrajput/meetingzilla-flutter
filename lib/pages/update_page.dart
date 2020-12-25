@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_setting_btn.dart';
 
 class UpdatePage extends StatefulWidget {
@@ -17,30 +19,25 @@ class _UpdatePageState extends State<UpdatePage> {
       body: SafeArea(
         child: Column(
           children: [
-            _topBodyArea(bodyHeight),
+            CustomAppBar(
+              title: UPDATE,
+              trailing: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: FaIcon(
+                  FontAwesomeIcons.solidArrowAltCircleLeft,
+                  color: Theme.of(context).accentColor,
+                  size: 32.0,
+                ),
+              ),
+            ),
             Expanded(child: _bottomBodyArea(bodyHeight)),
           ],
         ),
       ),
     );
   }
-
-  Container _topBodyArea(height) => Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              UPDATE,
-              style: TextStyle(
-                fontSize: height * 0.04,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-          ],
-        ),
-      );
 
   Container _bottomBodyArea(height) => Container(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -53,7 +50,7 @@ class _UpdatePageState extends State<UpdatePage> {
               Divider(color: Theme.of(context).accentColor),
               CustomSettingButton(
                 title: 'Check For Update',
-                titleColor: secondColor,
+                titleColor: thirdColor,
                 onTap: () {},
               ),
               Padding(
@@ -62,7 +59,16 @@ class _UpdatePageState extends State<UpdatePage> {
               ),
               CustomSettingButton(
                 title: 'Changelog',
-                titleColor: Colors.redAccent,
+                titleColor: thirdColor,
+                onTap: () {},
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Divider(color: Theme.of(context).accentColor),
+              ),
+              CustomSettingButton(
+                title: 'Version',
+                titleColor: thirdColor,
                 onTap: () {},
               ),
               Divider(color: Theme.of(context).accentColor),

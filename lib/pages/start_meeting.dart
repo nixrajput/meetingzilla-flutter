@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/models/meeting.dart';
 import 'package:meetingzilla/pages/conference_calling_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/utils/util_functions.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_dropdown_btn.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 
@@ -80,7 +83,19 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
       body: SafeArea(
         child: Column(
           children: [
-            _topBodyArea(bodyHeight),
+            CustomAppBar(
+              title: NEW_MEETING,
+              trailing: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: FaIcon(
+                  FontAwesomeIcons.solidArrowAltCircleLeft,
+                  color: Theme.of(context).accentColor,
+                  size: 32.0,
+                ),
+              ),
+            ),
             Expanded(child: _bottomBodyArea(bodyHeight)),
           ],
         ),
@@ -88,46 +103,13 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
     );
   }
 
-  Container _topBodyArea(height) => Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    NEW_MEETING,
-                    style: TextStyle(
-                      fontSize: height * 0.04,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).accentColor,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      color: Theme.of(context).accentColor,
-                      size: 40.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-
   Container _bottomBodyArea(height) => Container(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               _meetingText(),
               _meetingOptions(),
               SizedBox(height: 40.0),
@@ -158,13 +140,13 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey.shade700,
               ),
             ),
             SizedBox(width: 8.0),
             Text(
               '${formatMeetingId(widget.authProvider.meetingId)}',
               style: TextStyle(
+                color: thirdColor,
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),

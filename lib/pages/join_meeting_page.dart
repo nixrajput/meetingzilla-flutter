@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/conference_calling_page.dart';
 import 'package:meetingzilla/utils/util_functions.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 
 class JoinMeetingPage extends StatefulWidget {
@@ -43,46 +45,25 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
       body: SafeArea(
         child: Column(
           children: [
-            _topBodyArea(bodyHeight),
+            CustomAppBar(
+              title: JOIN_MEETING,
+              trailing: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: FaIcon(
+                  FontAwesomeIcons.solidArrowAltCircleLeft,
+                  color: Theme.of(context).accentColor,
+                  size: 32.0,
+                ),
+              ),
+            ),
             Expanded(child: _bottomBodyArea(bodyHeight)),
           ],
         ),
       ),
     );
   }
-
-  Container _topBodyArea(height) => Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Join Meeting',
-                    style: TextStyle(
-                      fontSize: height * 0.04,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).accentColor,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      color: Theme.of(context).accentColor,
-                      size: 40.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
 
   Container _bottomBodyArea(height) => Container(
         padding: const EdgeInsets.all(16.0),
@@ -92,7 +73,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               TextFormField(
                 key: ValueKey(MEETING_ID),
                 keyboardType: TextInputType.number,

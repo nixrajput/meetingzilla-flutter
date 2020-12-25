@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/index.dart';
-import 'package:meetingzilla/pages/welcome.dart';
+import 'package:meetingzilla/pages/index_page.dart';
+import 'package:meetingzilla/pages/welcome_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/utils/validators.dart';
@@ -390,7 +390,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.symmetric(vertical: 10.0),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               child: Text(
-                JOIN,
+                NEXT,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,

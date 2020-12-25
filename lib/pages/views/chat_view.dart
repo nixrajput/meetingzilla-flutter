@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meetingzilla/constants/strings.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 
 class ChatView extends StatefulWidget {
   @override
@@ -15,28 +16,15 @@ class _ChatViewState extends State<ChatView> {
       body: SafeArea(
         child: Column(
           children: [
-            _topBodyArea(bodyHeight),
+            CustomAppBar(
+              title: CHATS,
+              titleSize: bodyHeight * 0.04,
+              titleColor: Theme.of(context).accentColor,
+            ),
             //Expanded(child: _bottomBodyArea(bodyHeight)),
           ],
         ),
       ),
     );
   }
-
-  Container _topBodyArea(height) => Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              CHATS,
-              style: TextStyle(
-                fontSize: height * 0.04,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-          ],
-        ),
-      );
 }

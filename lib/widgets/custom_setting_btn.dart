@@ -14,10 +14,10 @@ class CustomSettingButton extends StatelessWidget {
     this.title,
     this.icon,
     this.onTap,
-    this.titleColor = Colors.black,
-    this.iconColor = Colors.black,
-    this.arrowColor = Colors.black,
-    this.bgColor = Colors.white,
+    this.titleColor,
+    this.iconColor,
+    this.arrowColor,
+    this.bgColor,
   }) : super(key: key);
 
   @override
@@ -25,8 +25,11 @@ class CustomSettingButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16.0),
-        color: bgColor,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 10.0,
+        ),
+        color: bgColor ?? Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -35,14 +38,14 @@ class CustomSettingButton extends StatelessWidget {
                 if (icon != null)
                   Icon(
                     icon,
-                    color: iconColor,
+                    color: titleColor ?? iconColor,
                   ),
                 if (icon != null) SizedBox(width: 20.0),
                 Text(
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                     color: titleColor,
                   ),
@@ -51,7 +54,7 @@ class CustomSettingButton extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: arrowColor,
+              color: titleColor ?? arrowColor,
             ),
           ],
         ),

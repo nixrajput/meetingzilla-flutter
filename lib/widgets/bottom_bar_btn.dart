@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomBarButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -12,13 +13,13 @@ class BottomBarButton extends StatelessWidget {
 
   const BottomBarButton({
     this.onTap,
-    this.color = Colors.transparent,
+    this.color,
     this.icon,
     this.iconColor,
-    this.borderColor = Colors.white,
-    this.iconSize = 24.0,
-    this.margin = 0.0,
-    this.padding = 16.0,
+    this.borderColor,
+    this.iconSize,
+    this.margin,
+    this.padding,
   });
 
   @override
@@ -26,21 +27,21 @@ class BottomBarButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(padding),
-        margin: EdgeInsets.all(margin),
+        padding: EdgeInsets.all(padding ?? 8.0),
+        margin: EdgeInsets.all(margin ?? 0.0),
         decoration: BoxDecoration(
-            color: color,
+            color: color ?? Colors.transparent,
             shape: BoxShape.circle,
             border: Border(
-              top: BorderSide(color: borderColor),
-              bottom: BorderSide(color: borderColor),
-              left: BorderSide(color: borderColor),
-              right: BorderSide(color: borderColor),
+              top: BorderSide(color: borderColor ?? Colors.white),
+              bottom: BorderSide(color: borderColor ?? Colors.white),
+              left: BorderSide(color: borderColor ?? Colors.white),
+              right: BorderSide(color: borderColor ?? Colors.white),
             )),
-        child: Icon(
+        child: FaIcon(
           icon,
-          color: iconColor,
-          size: iconSize,
+          color: iconColor ?? Colors.white,
+          size: iconSize ?? 24.0,
         ),
       ),
     );

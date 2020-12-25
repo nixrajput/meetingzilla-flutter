@@ -4,12 +4,14 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/bottom_sheet_button.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 import 'package:meetingzilla/widgets/rounded_linear_progress_bar.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +66,19 @@ class _UploadImagePageState extends State<UploadImagePage>
             ? Center(child: _uploadStatusScreen(bodyWidth))
             : Column(
                 children: [
-                  _topBodyArea(bodyHeight),
+                  CustomAppBar(
+                    title: UPLOAD,
+                    trailing: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: FaIcon(
+                        FontAwesomeIcons.solidArrowAltCircleLeft,
+                        color: Theme.of(context).accentColor,
+                        size: 32.0,
+                      ),
+                    ),
+                  ),
                   Expanded(child: _bottomBodyArea(bodyHeight)),
                 ],
               ),
@@ -109,33 +123,6 @@ class _UploadImagePageState extends State<UploadImagePage>
       ),
     );
   }
-
-  Container _topBodyArea(height) => Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              UPLOAD,
-              style: TextStyle(
-                fontSize: height * 0.04,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back_outlined,
-                color: Theme.of(context).accentColor,
-                size: 40.0,
-              ),
-            ),
-          ],
-        ),
-      );
 
   Container _bottomBodyArea(height) => Container(
         padding: const EdgeInsets.all(16.0),

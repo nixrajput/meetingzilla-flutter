@@ -2,13 +2,14 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/about.dart';
-import 'package:meetingzilla/pages/login.dart';
+import 'package:meetingzilla/pages/about_page.dart';
+import 'package:meetingzilla/pages/login_page.dart';
 import 'package:meetingzilla/pages/update_page.dart';
 import 'package:meetingzilla/pages/upload_image.dart';
-import 'package:meetingzilla/pages/welcome.dart';
+import 'package:meetingzilla/pages/welcome_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_setting_btn.dart';
 import 'package:meetingzilla/widgets/rounded_network_image.dart';
 import 'package:meetingzilla/widgets/setting_custom_text.dart';
@@ -31,36 +32,23 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
-    final bodyHeight = MediaQuery.of(context).size.height -
+    final double bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            _topBodyArea(bodyHeight),
+            CustomAppBar(
+              title: SETTINGS,
+              titleSize: bodyHeight * 0.04,
+              titleColor: Theme.of(context).accentColor,
+            ),
             Expanded(child: _bottomBodyArea(bodyHeight)),
           ],
         ),
       ),
     );
   }
-
-  Container _topBodyArea(height) => Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              SETTINGS,
-              style: TextStyle(
-                fontSize: height * 0.04,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-          ],
-        ),
-      );
 
   Widget _imageArea(String _imageUrl) {
     if (_imageUrl != null) {
@@ -111,7 +99,7 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  Container _bottomBodyArea(height) => Container(
+  Container _bottomBodyArea(double height) => Container(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: SingleChildScrollView(
           child: Column(
@@ -161,9 +149,8 @@ class _SettingsViewState extends State<SettingsView> {
               Divider(color: Theme.of(context).accentColor),
               CustomSettingButton(
                 title: ABOUT,
-                titleColor: secondColor,
+                titleColor: thirdColor,
                 icon: Icons.info,
-                iconColor: secondColor,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -176,21 +163,18 @@ class _SettingsViewState extends State<SettingsView> {
                 title: LOGOUT,
                 titleColor: Colors.redAccent,
                 icon: Icons.logout,
-                iconColor: Colors.redAccent,
                 onTap: _logOutUser,
               ),
               CustomSettingButton(
                 title: REMOVE_USER,
                 titleColor: Colors.redAccent,
                 icon: Icons.delete_forever,
-                iconColor: Colors.redAccent,
                 onTap: _removeUserData,
               ),
               CustomSettingButton(
                 title: UPDATE,
-                titleColor: Theme.of(context).accentColor,
+                titleColor: thirdColor,
                 icon: Icons.repeat,
-                iconColor: Theme.of(context).accentColor,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -200,6 +184,7 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               Divider(color: Theme.of(context).accentColor),
+              SizedBox(height: height * 0.1),
             ],
           ),
         ),

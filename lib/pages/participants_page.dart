@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
+import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/rounded_network_image.dart';
 import 'package:provider/provider.dart';
 
@@ -31,40 +33,25 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
       body: SafeArea(
         child: Column(
           children: [
-            _topBodyArea(bodyHeight),
+            CustomAppBar(
+              title: PARTICIPANTS,
+              trailing: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: FaIcon(
+                  FontAwesomeIcons.solidArrowAltCircleLeft,
+                  color: Theme.of(context).accentColor,
+                  size: 32.0,
+                ),
+              ),
+            ),
             Expanded(child: _bottomBodyArea(bodyHeight)),
           ],
         ),
       ),
     );
   }
-
-  Container _topBodyArea(height) => Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              PARTICIPANTS,
-              style: TextStyle(
-                fontSize: height * 0.04,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back_outlined,
-                color: Theme.of(context).accentColor,
-                size: 40.0,
-              ),
-            ),
-          ],
-        ),
-      );
 
   Container _bottomBodyArea(height) => Container(
         padding: const EdgeInsets.symmetric(
@@ -75,7 +62,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               Text(
                 'Total: (${widget.users.length.toString()})',
                 textAlign: TextAlign.center,

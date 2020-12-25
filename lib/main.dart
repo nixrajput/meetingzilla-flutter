@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/splash.dart';
+import 'package:meetingzilla/pages/splash_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/providers/channel_provider.dart';
 import 'package:meetingzilla/utils/custom_route.dart';

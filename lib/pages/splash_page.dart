@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/index.dart';
-import 'package:meetingzilla/pages/login.dart';
+import 'package:meetingzilla/pages/index_page.dart';
+import 'package:meetingzilla/pages/login_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
+import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +67,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           _latVer = latVer;
         });
       }
+
       if (!_updateAvail) {
         _navigateToPage();
       }
@@ -130,9 +130,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     filterQuality: FilterQuality.high,
                   ),
                   SizedBox(height: bodyHeight * 0.1),
-                  CircularProgressIndicator(
-                    valueColor: _animationController
-                        .drive(ColorTween(begin: secondColor, end: firstColor)),
+                  CustomCircularProgressIndicator(
+                    color: Theme.of(context).accentColor,
                   ),
                 ],
               ),
@@ -152,13 +151,13 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               ),
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.white12,
+                  color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade300,
-                      offset: Offset.zero,
-                      blurRadius: 0.0,
+                      color: Colors.black.withOpacity(0.2),
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 16.0,
                     ),
                   ]),
               child: SingleChildScrollView(

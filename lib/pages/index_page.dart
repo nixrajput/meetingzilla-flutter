@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/pages/views/call_view.dart';
 import 'package:meetingzilla/pages/views/chat_view.dart';
 import 'package:meetingzilla/pages/views/contact_view.dart';
@@ -56,11 +57,13 @@ class IndexState extends State<IndexPage> {
         MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
           children: [
-            Expanded(child: _bottomBodyArea(bodyHeight)),
-            _bottomAppBar(),
+            _bottomBodyArea(bodyHeight),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _bottomAppBar(),
+            ),
           ],
         ),
       ),
@@ -81,7 +84,7 @@ class IndexState extends State<IndexPage> {
       );
 
   Widget _bottomAppBar() => Container(
-        margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         width: double.infinity,
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -106,12 +109,12 @@ class IndexState extends State<IndexPage> {
               },
               child: Container(
                 padding: const EdgeInsets.all(20.0),
-                child: Icon(
-                  _currentIndex == 0 ? Icons.videocam : Icons.videocam_outlined,
-                  size: 32.0,
+                child: FaIcon(
+                  FontAwesomeIcons.video,
                   color: _currentIndex == 0
                       ? Theme.of(context).accentColor
                       : Colors.grey,
+                  size: 32.0,
                 ),
               ),
             ),
@@ -124,12 +127,12 @@ class IndexState extends State<IndexPage> {
               },
               child: Container(
                 padding: const EdgeInsets.all(20.0),
-                child: Icon(
-                  _currentIndex == 1 ? Icons.person : Icons.person_outline,
-                  size: 32.0,
+                child: FaIcon(
+                  FontAwesomeIcons.calendar,
                   color: _currentIndex == 1
                       ? Theme.of(context).accentColor
                       : Colors.grey,
+                  size: 32.0,
                 ),
               ),
             ),
@@ -142,14 +145,12 @@ class IndexState extends State<IndexPage> {
               },
               child: Container(
                 padding: const EdgeInsets.all(20.0),
-                child: Icon(
-                  _currentIndex == 2
-                      ? Icons.chat_bubble_outlined
-                      : Icons.chat_bubble_outline_outlined,
-                  size: 32.0,
+                child: FaIcon(
+                  FontAwesomeIcons.solidEnvelope,
                   color: _currentIndex == 2
                       ? Theme.of(context).accentColor
                       : Colors.grey,
+                  size: 32.0,
                 ),
               ),
             ),
@@ -162,12 +163,12 @@ class IndexState extends State<IndexPage> {
               },
               child: Container(
                 padding: const EdgeInsets.all(20.0),
-                child: Icon(
-                  _currentIndex == 3 ? Icons.settings : Icons.settings_outlined,
-                  size: 32.0,
+                child: FaIcon(
+                  FontAwesomeIcons.cog,
                   color: _currentIndex == 3
                       ? Theme.of(context).accentColor
                       : Colors.grey,
+                  size: 32.0,
                 ),
               ),
             ),

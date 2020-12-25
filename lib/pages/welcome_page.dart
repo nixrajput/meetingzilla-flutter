@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/login.dart';
+import 'package:meetingzilla/pages/login_page.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/utils/random_string.dart';
 import 'package:meetingzilla/utils/validators.dart';

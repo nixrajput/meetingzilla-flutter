@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const Color firstColor = Color(0xFF20BF55);
 const Color secondColor = Color(0xFF01BAEF);
 const Color accentColor = Color(0xFF3DB991);
-const Color thirdColor = Color(0xFF39E5B6);
+const Color thirdColor = Color(0xFF6495ED);
 
 Map<int, Color> accColor = {
   50: Color.fromRGBO(60, 185, 145, .1),
