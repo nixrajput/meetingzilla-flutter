@@ -6,6 +6,7 @@ import 'package:meetingzilla/pages/login_page.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/utils/random_string.dart';
 import 'package:meetingzilla/utils/validators.dart';
+import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -137,7 +138,11 @@ class _WelcomePageState extends State<WelcomePage> {
     final bodyWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CustomCircularProgressIndicator(
+                color: Theme.of(context).accentColor,
+              ),
+            )
           : SafeArea(
               child: Center(
                 child: SingleChildScrollView(

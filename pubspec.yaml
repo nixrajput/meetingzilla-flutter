@@ -3,7 +3,7 @@ description: A video calling Flutter application for Android and iOS.
 
 publish_to: 'none'
 
-version: 1.0.3+25
+version: 1.0.4+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

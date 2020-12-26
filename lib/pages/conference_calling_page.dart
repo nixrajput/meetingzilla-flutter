@@ -23,12 +23,15 @@ class ConferenceCallingPage extends StatefulWidget {
   final String meetingId;
   final bool cameraToggle;
   final bool micToggle;
+  final String role;
 
   const ConferenceCallingPage({
     @required this.meetingId,
     @required this.cameraToggle,
     @required this.micToggle,
-  }) : assert(meetingId != null);
+    @required this.role,
+  })  : assert(meetingId != null, 'Meeting ID must not be null.'),
+        assert(role != null, 'User Role must not be null.');
 
   @override
   _ConferenceCallingPageState createState() => _ConferenceCallingPageState();
@@ -50,10 +53,12 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   Future<void> _initMeetingData() async {
     await FirebaseFunctions.meetingCollection
         .doc(widget.meetingId)
-        .collection('participants')
+        .collection(PARTICIPANTS.toLowerCase())
         .doc('${_authProvider.agoraUserId}')
         .set({
-      'startAt': DateTime.now().toString(),
+      NAME: _authProvider.userSnapshot.data()[NAME],
+      JOINED_AT: DateTime.now().toString(),
+      ROLE.toLowerCase(): widget.role,
     });
   }
 
@@ -195,13 +200,13 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   @override
   void initState() {
     super.initState();
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
-    _channelProvider = Provider.of<ChannelProvider>(context, listen: false);
-    initialize();
     setState(() {
       _cameraToggle = widget.cameraToggle ?? true;
       _micToggle = widget.micToggle ?? true;
     });
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
+    _channelProvider = Provider.of<ChannelProvider>(context, listen: false);
+    initialize();
   }
 
   @override
@@ -210,9 +215,9 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
     _engine?.destroy();
     FirebaseFunctions.meetingCollection
         .doc(widget.meetingId)
-        .collection('participants')
+        .collection(PARTICIPANTS.toLowerCase())
         .doc('${_authProvider.agoraUserId}')
-        .update({'endAt': DateTime.now().toString()});
+        .update({END_AT: DateTime.now().toString()});
     Wakelock.disable();
     super.dispose();
   }
@@ -224,7 +229,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
     return StreamBuilder(
       stream: FirebaseFunctions.meetingCollection
           .doc(widget.meetingId)
-          .collection('participants')
+          .collection(PARTICIPANTS.toLowerCase())
           .snapshots(),
       builder: (_, _meetingSnapshots) => Scaffold(
         backgroundColor: Colors.black,
@@ -234,15 +239,18 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
                   color: Theme.of(context).accentColor,
                 ),
               )
-            : SafeArea(child: _renderVideo(bodyHeight, _meetingSnapshots)),
+            : SafeArea(
+                child: _renderVideo(
+                bodyHeight,
+                _meetingSnapshots,
+              )),
       ),
     );
   }
 
-  void switchRender() {
+  void switchRender(int uid) {
     setState(() {
       _switchRender = !_switchRender;
-      _participants = List.of(_participants.reversed);
     });
   }
 
@@ -259,36 +267,47 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               if (_participants != null && _participants.isNotEmpty)
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children:
-                        List.of(_participants.map((uid) => GestureDetector(
-                              onTap: switchRender,
-                              child: Container(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                color: Colors.transparent,
-                                width: 120.0,
-                                height: 140.0,
-                                child: Stack(
-                                  children: [
-                                    RtcRemoteView.SurfaceView(uid: uid),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 4.0,
-                                        left: 4.0,
-                                      ),
-                                      child: Text(
-                                        uid.toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Row(
+                      children:
+                          List.of(_participants.map((uid) => GestureDetector(
+                                onTap: () => switchRender(uid),
+                                child: Container(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 16.0,
+                                          offset: Offset.zero,
+                                        )
+                                      ]),
+                                  width: 100.0,
+                                  height: 120.0,
+                                  child: Stack(
+                                    children: [
+                                      RtcRemoteView.SurfaceView(uid: uid),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 4.0,
+                                          left: 4.0,
+                                        ),
+                                        child: Text(
+                                          uid.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ))),
+                              ))),
+                    ),
                   ),
                 ),
               _floatingControlBar(),
@@ -478,9 +497,9 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   void _onCallEnd(BuildContext context) async {
     await FirebaseFunctions.meetingCollection
         .doc(widget.meetingId)
-        .collection('participants')
+        .collection(PARTICIPANTS.toLowerCase())
         .doc('${_authProvider.agoraUserId}')
-        .update({'endAt': DateTime.now().toString()});
+        .update({END_AT: DateTime.now().toString()});
     Navigator.pop(context);
   }
 

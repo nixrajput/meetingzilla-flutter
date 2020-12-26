@@ -16,8 +16,7 @@ class FirebaseFunctions {
   static Future<DocumentSnapshot> getAppInfo() async {
     DocumentSnapshot appInfoSnapshot =
         await appInfoCollection.doc(APP_INFO).get();
-
-    return appInfoSnapshot;
+    return appInfoSnapshot ?? null;
   }
 
   static Future<String> registerUser(String email, String password) async {
@@ -29,7 +28,7 @@ class FirebaseFunctions {
     return firebaseUser.uid;
   }
 
-  static Future<String> signinUser(String email, String password) async {
+  static Future<String> signInUser(String email, String password) async {
     final result = await auth.signInWithEmailAndPassword(
       email: email,
       password: password,
@@ -43,7 +42,7 @@ class FirebaseFunctions {
     return firebaseUser;
   }
 
-  static Future<void> signoutUser() async {
+  static Future<void> signOutUser() async {
     return auth.signOut();
   }
 

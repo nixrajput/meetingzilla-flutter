@@ -8,6 +8,7 @@ import 'package:meetingzilla/pages/welcome_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/utils/validators.dart';
+import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
 
       var userId;
 
-      userId = await FirebaseFunctions.signinUser(
+      userId = await FirebaseFunctions.signInUser(
         _emailController.text,
         _passwordController.text,
       ).catchError((e) {
@@ -92,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> _checkEmailVerification() async {
     bool isEmailVerified = await FirebaseFunctions.isEmailVerified();
     if (!isEmailVerified) {
-      await FirebaseFunctions.signoutUser();
+      await FirebaseFunctions.signOutUser();
       _showVerifyEmailDialog();
     }
     return isEmailVerified;
@@ -207,7 +208,11 @@ class _LoginPageState extends State<LoginPage> {
     final bodyWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CustomCircularProgressIndicator(
+                color: Theme.of(context).accentColor,
+              ),
+            )
           : SafeArea(
               child: Center(
                 child: SingleChildScrollView(
@@ -237,9 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Image.asset(
-                '$IMAGE_DIR/login.png',
-              ),
+              Image.asset(LOGIN_IMAGE_PATH),
               SizedBox(height: 40.0),
               TextFormField(
                 key: ValueKey(EMAIL),

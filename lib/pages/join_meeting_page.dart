@@ -27,6 +27,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
           meetingId: channelId,
           cameraToggle: true,
           micToggle: true,
+          role: CO_HOST,
         ),
       ),
     );

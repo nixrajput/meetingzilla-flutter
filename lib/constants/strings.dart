@@ -71,6 +71,13 @@ const AUDIO = 'Audio';
 const MEETING_TYPE = 'Meeting Type';
 const CONFERENCE = 'CONFERENCE';
 const CLASSROOM = 'CLASSROOM';
+const RETRY = 'Retry';
+const HOST = 'HOST';
+const ROLE = 'Role';
+const CO_HOST = 'CO-HOST';
+const CLIENT = 'CLIENT';
+const JOINED_AT = 'joinedAt';
+const END_AT = 'endAt';
 
 /// FIREBASE CONSTANTS
 const APP_INFO_REF = 'app_info';
@@ -85,3 +92,6 @@ const TRASH_REF = 'trash';
 
 /// PATHS
 const iconUrl = 'https://github.com/nixrajput/nixlab-inc/blob/master/icon.png';
+const LOCAL_ICON_PATH = '$IMAGE_DIR/icon.png';
+const LOGIN_IMAGE_PATH = '$IMAGE_DIR/login.png';
+const USER_IMAGE_PATH = '$IMAGE_DIR/user.png';

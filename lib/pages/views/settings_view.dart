@@ -1,5 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/about_page.dart';
@@ -23,11 +24,20 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   AuthProvider _authProvider;
+  bool _isEmailVerified = false;
 
   @override
   void initState() {
     super.initState();
+    _checkEmailVerification();
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
+  }
+
+  void _checkEmailVerification() async {
+    final emailVerify = await FirebaseFunctions.isEmailVerified();
+    setState(() {
+      _isEmailVerified = emailVerify;
+    });
   }
 
   @override
@@ -133,9 +143,20 @@ class _SettingsViewState extends State<SettingsView> {
               SizedBox(height: 10.0),
               Divider(color: Theme.of(context).accentColor),
               SizedBox(height: 10.0),
-              CustomTextArea(
-                title: '${EMAIL.toUpperCase()} :',
-                text: '${_authProvider.userSnapshot.data()[EMAIL]}',
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomTextArea(
+                    title: '${EMAIL.toUpperCase()} :',
+                    text: '${_authProvider.userSnapshot.data()[EMAIL]}',
+                  ),
+                  if (_isEmailVerified)
+                    FaIcon(
+                      FontAwesomeIcons.checkCircle,
+                      color: secondColor,
+                      size: 20.0,
+                    )
+                ],
               ),
               CustomTextArea(
                 title: '${UID.toUpperCase()} :',
@@ -184,7 +205,7 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               Divider(color: Theme.of(context).accentColor),
-              SizedBox(height: height * 0.1),
+              SizedBox(height: height * 0.2),
             ],
           ),
         ),
@@ -193,7 +214,7 @@ class _SettingsViewState extends State<SettingsView> {
   void _logOutUser() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(USER_DATA);
-    await FirebaseFunctions.signoutUser();
+    await FirebaseFunctions.signOutUser();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => LoginPage()));
   }
@@ -201,7 +222,7 @@ class _SettingsViewState extends State<SettingsView> {
   void _removeUserData() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(USER_DATA);
-    await FirebaseFunctions.signoutUser();
+    await FirebaseFunctions.signOutUser();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => WelcomePage()));
   }

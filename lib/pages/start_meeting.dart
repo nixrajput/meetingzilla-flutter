@@ -44,6 +44,7 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
           meetingId: widget.authProvider.meetingId,
           cameraToggle: _cameraToggle,
           micToggle: _micToggle,
+          role: HOST,
         ),
       ),
     );

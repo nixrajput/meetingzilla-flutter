@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meetingzilla/constants/strings.dart';
@@ -20,18 +19,20 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   AuthProvider _authProvider;
-  bool _updateAvail = false;
+  bool _hasUpdate = false;
+  bool _hasError = false;
+  bool _isLoading = false;
+  var _message;
   var _downloadUrl;
   var _latVer;
   List<dynamic> _changelog;
   AnimationController _animationController;
-  DocumentSnapshot _appInfoSnapshot;
   PackageInfo _packageInfo;
 
   @override
   void initState() {
     super.initState();
-    _checkAppUpdate();
+    _initializeApp();
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
     _authProvider.checkUserInfo();
     _animationController =
@@ -39,41 +40,62 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     _animationController.repeat();
   }
 
-  Future<void> _initPackageInfo() async {
-    final info = await PackageInfo.fromPlatform();
-    setState(() {
-      _packageInfo = info;
-    });
-  }
-
-  void _checkAppUpdate() async {
-    await _initPackageInfo();
-    _appInfoSnapshot = await FirebaseFunctions.getAppInfo();
-    if (_appInfoSnapshot.exists) {
-      final ver = _appInfoSnapshot.data()[LATEST_VER];
-      int major = int.parse(_packageInfo.version.substring(0, 1));
-      int minor = int.parse(_packageInfo.version.substring(2, 3));
-      int patch = int.parse(
-          _packageInfo.version.substring(4, _packageInfo.version.length));
-      print('$VERSION : $major.$minor.$patch');
-      final Version currVer = Version(major, minor, patch);
-      final Version latVer = Version.parse(ver);
-
-      if (latVer > currVer) {
+  Future<void> _initializeApp() async {
+    try {
+      await PackageInfo.fromPlatform().then((info) {
         setState(() {
-          _updateAvail = true;
-          _downloadUrl = _appInfoSnapshot.data()[APP_URL].toString();
-          _changelog = _appInfoSnapshot.data()[CHANGELOG];
-          _latVer = latVer;
+          _packageInfo = info;
         });
-      }
-
-      if (!_updateAvail) {
-        _navigateToPage();
-      }
-    } else {
-      print("User data doesn't not exists.");
+      });
+    } on Exception catch (e) {
+      setState(() {
+        _hasError = true;
+        _message = e.toString();
+        _isLoading = false;
+      });
     }
+    try {
+      await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
+        if (appInfoSnapshot.exists) {
+          final ver = appInfoSnapshot.data()[LATEST_VER];
+          int major = int.parse(_packageInfo.version.substring(0, 1));
+          int minor = int.parse(_packageInfo.version.substring(2, 3));
+          int patch = int.parse(
+              _packageInfo.version.substring(4, _packageInfo.version.length));
+          print('$VERSION : $major.$minor.$patch');
+          print('LATEST $VERSION: $ver');
+          final Version currVer = Version(major, minor, patch);
+          final Version latVer = Version.parse(ver);
+
+          if (latVer > currVer) {
+            setState(() {
+              _hasUpdate = true;
+              _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
+              _changelog = appInfoSnapshot.data()[CHANGELOG];
+              _latVer = latVer;
+            });
+          }
+          if (!_hasUpdate && !_isLoading && !_hasError) {
+            _navigateToPage();
+          }
+        } else {
+          setState(() {
+            _hasError = true;
+            _message = "User data doesn't not exists.";
+            _isLoading = false;
+          });
+        }
+      });
+    } on Exception catch (ex) {
+      setState(() {
+        _hasError = true;
+        _message = ex.toString();
+        _isLoading = false;
+      });
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _navigateToDownloadUrl() async {
@@ -117,27 +139,57 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     final bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
-      body: Center(
-        child: _updateAvail
-            ? _updateScreen(bodyHeight)
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    '$IMAGE_DIR/icon.png',
-                    height: 100.0,
-                    width: 100.0,
-                    filterQuality: FilterQuality.high,
-                  ),
-                  SizedBox(height: bodyHeight * 0.1),
-                  CustomCircularProgressIndicator(
-                    color: Theme.of(context).accentColor,
-                  ),
-                ],
-              ),
-      ),
-    );
+        body: Center(
+      child: _isLoading
+          ? _loadingScreen(bodyHeight)
+          : _hasError
+              ? _errorScreen()
+              : _hasUpdate
+                  ? _updateScreen(bodyHeight)
+                  : _loadingScreen(bodyHeight),
+    ));
   }
+
+  Widget _errorScreen() => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            SizedBox(height: 40.0),
+            CustomRoundedButton(
+              title: '$RETRY',
+              onTap: _initializeApp,
+            ),
+          ],
+        ),
+      );
+
+  Widget _loadingScreen(bodyHeight) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            LOCAL_ICON_PATH,
+            height: 100.0,
+            width: 100.0,
+            filterQuality: FilterQuality.high,
+          ),
+          SizedBox(height: bodyHeight * 0.1),
+          CustomCircularProgressIndicator(
+            color: Theme.of(context).accentColor,
+          ),
+        ],
+      );
 
   Widget _updateScreen(bodyHeight) => Padding(
         padding: const EdgeInsets.all(16.0),
