@@ -33,7 +33,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
       var userId;
 
-      userId = await FirebaseFunctions.signupUser(
+      userId = await FirebaseFunctions.registerUser(
         _emailController.text,
         _passwordController.text,
       ).catchError((e) {

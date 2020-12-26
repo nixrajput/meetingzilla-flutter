@@ -20,7 +20,7 @@ class FirebaseFunctions {
     return appInfoSnapshot;
   }
 
-  static Future<String> signupUser(String email, String password) async {
+  static Future<String> registerUser(String email, String password) async {
     final result = await auth.createUserWithEmailAndPassword(
       email: email,
       password: password,

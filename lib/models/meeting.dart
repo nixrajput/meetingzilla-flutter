@@ -8,8 +8,8 @@ class Meeting {
 
   static List<Meeting> getCompanies() {
     return <Meeting>[
-      Meeting(1, CONFERENCE),
-      Meeting(2, CLASSROOM),
+      Meeting(0, CONFERENCE),
+      Meeting(1, CLASSROOM),
     ];
   }
 }

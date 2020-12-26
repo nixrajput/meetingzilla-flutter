@@ -72,7 +72,7 @@ const MEETING_TYPE = 'Meeting Type';
 const CONFERENCE = 'CONFERENCE';
 const CLASSROOM = 'CLASSROOM';
 
-// FIREBASE CONSTANTS
+/// FIREBASE CONSTANTS
 const APP_INFO_REF = 'app_info';
 const USER_REF = 'users';
 const APP_INFO = 'AppInfo';
@@ -82,3 +82,6 @@ const IMAGE_URL = 'image_url';
 const IMAGE_REF = 'profile_images';
 const MEETING_REF = 'meetings';
 const TRASH_REF = 'trash';
+
+/// PATHS
+const iconUrl = 'https://github.com/nixrajput/nixlab-inc/blob/master/icon.png';

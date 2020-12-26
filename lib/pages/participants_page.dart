@@ -84,7 +84,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                           imageSize: 40.0,
                           imageUrl: widget.users[i] == _authProvider.agoraUserId
                               ? _authProvider.userSnapshot.data()[IMAGE_URL]
-                              : '',
+                              : iconUrl,
                           strokeWidth: 0.0,
                           strokeColor: Colors.transparent,
                         ),

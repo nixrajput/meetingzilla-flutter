@@ -160,7 +160,6 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
           horizontal: 16.0,
           vertical: 8.0,
         ),
-        color: Colors.black.withOpacity(0.1),
         child: Column(
           children: [
             Row(

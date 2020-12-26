@@ -87,14 +87,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   Future<void> _initAgoraRtcEngine() async {
     _engine = await RtcEngine.create(APP_ID);
     await _engine?.enableVideo();
-    await _engine?.startPreview();
     await _engine?.setChannelProfile(ChannelProfile.Communication);
-    _engine?.muteLocalVideoStream(widget.cameraToggle);
-    _engine?.muteLocalAudioStream(widget.micToggle);
-    setState(() {
-      _cameraToggle = widget.cameraToggle;
-      _micToggle = widget.micToggle;
-    });
   }
 
   void _addAgoraEventHandlers() {
@@ -205,6 +198,10 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
     _channelProvider = Provider.of<ChannelProvider>(context, listen: false);
     initialize();
+    setState(() {
+      _cameraToggle = widget.cameraToggle ?? true;
+      _micToggle = widget.micToggle ?? true;
+    });
   }
 
   @override
@@ -253,32 +250,56 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
     return Stack(
       children: [
         RtcLocalView.SurfaceView(),
-        if (_participants != null && _participants.isNotEmpty)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.of(_participants.map((uid) => GestureDetector(
-                      onTap: this.switchRender,
-                      child: Container(
-                        width: 120.0,
-                        height: 140.0,
-                        child: RtcRemoteView.SurfaceView(uid: uid),
-                      ),
-                    ))),
-              ),
-            ),
-          ),
         Align(
           alignment: Alignment.bottomCenter,
-          child: _floatingAppBar(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (_participants != null && _participants.isNotEmpty)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children:
+                        List.of(_participants.map((uid) => GestureDetector(
+                              onTap: switchRender,
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                color: Colors.transparent,
+                                width: 120.0,
+                                height: 140.0,
+                                child: Stack(
+                                  children: [
+                                    RtcRemoteView.SurfaceView(uid: uid),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 4.0,
+                                        left: 4.0,
+                                      ),
+                                      child: Text(
+                                        uid.toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ))),
+                  ),
+                ),
+              _floatingControlBar(),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Container _floatingAppBar() => Container(
+  Container _floatingControlBar() => Container(
         color: Colors.transparent,
         padding: const EdgeInsets.only(
           top: 8.0,
@@ -288,6 +309,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
           children: [
             BottomBarButton(
               onTap: () => _onCallEnd(context),
@@ -324,7 +346,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               color: !_cameraToggle ? Colors.redAccent : Colors.transparent,
             ),
             BottomBarButton(
-              onTap: () {},
+              onTap: () => _showMoreOptionsBottomSheet(context),
               icon: FontAwesomeIcons.ellipsisH,
             ),
           ],
@@ -350,7 +372,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
             children: [
               SizedBox(height: 10.0),
               Text(
-                MEETING_DETAILS.toUpperCase(),
+                MEETING_DETAILS,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24.0,
@@ -360,18 +382,18 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               ),
               SizedBox(height: 20.0),
               CustomTextArea(
-                title: '${MEETING_ID.toUpperCase()} :',
+                title: '$MEETING_ID :',
                 text: '${widget.meetingId}',
                 centerText: true,
               ),
               CustomTextArea(
-                title: '${YOUR_ID.toUpperCase()} :',
+                title: '$YOUR_ID :',
                 text: '$_uid',
                 centerText: true,
               ),
               CustomTextArea(
-                title: '$TOTAL $PARTICIPANTS :'.toUpperCase(),
-                text: '${_participants.length}',
+                title: '$TOTAL $PARTICIPANTS :',
+                text: '${_participants.length + 1}',
                 centerText: true,
               ),
             ],
@@ -398,90 +420,58 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
             children: [
               SizedBox(height: 10.0),
               Text(
-                '$MORE_OPTIONS'.toUpperCase(),
+                '$MORE_OPTIONS',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).accentColor,
                 ),
               ),
               SizedBox(height: 10.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomIconButton(
-                    icon: Icons.chat_bubble_outline_outlined,
-                    title: '$CHAT',
-                    onTap: () {},
+                    icon: FontAwesomeIcons.infoCircle,
+                    iconColor: Theme.of(context).accentColor,
+                    onTap: () {
+                      _showDetailsBottomSheet(ctx);
+                    },
                   ),
                   CustomIconButton(
-                    icon: Icons.screen_share_outlined,
-                    title: '$SCREEN_SHARE',
-                    onTap: () {},
+                    icon: FontAwesomeIcons.exchangeAlt,
+                    iconColor: Theme.of(context).accentColor,
+                    onTap: _onSwitchCamera,
                   ),
                   CustomIconButton(
-                    icon: Icons.fiber_smart_record_outlined,
-                    title: '$RECORD',
+                    icon: FontAwesomeIcons.shareAlt,
+                    iconColor: Theme.of(context).accentColor,
                     onTap: () {},
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomIconButton(
-                    icon: Icons.report_problem_outlined,
-                    title: 'Report problem',
+                    icon: FontAwesomeIcons.chromecast,
+                    iconColor: Theme.of(context).accentColor,
                     onTap: () {},
                   ),
                   CustomIconButton(
-                    icon: Icons.report_outlined,
-                    title: 'Report Abuse',
+                    icon: FontAwesomeIcons.bug,
+                    iconColor: Theme.of(context).accentColor,
                     onTap: () {},
                   ),
                   CustomIconButton(
-                    icon: Icons.settings_outlined,
-                    title: 'Settings',
+                    icon: FontAwesomeIcons.cog,
                     onTap: () {},
                   ),
                 ],
               ),
             ],
           ),
-        ),
-      );
-
-  Container _topAppBar(deviceSize) => Container(
-        color: Colors.transparent,
-        padding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 16.0,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {
-                _showDetailsBottomSheet(context);
-              },
-              child: FaIcon(
-                FontAwesomeIcons.infoCircle,
-                color: Theme.of(context).accentColor,
-                size: 32.0,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                _showMoreOptionsBottomSheet(context);
-              },
-              child: FaIcon(
-                FontAwesomeIcons.ellipsisV,
-                color: Theme.of(context).accentColor,
-                size: 32.0,
-              ),
-            ),
-          ],
         ),
       );
 
@@ -498,7 +488,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
     setState(() {
       _micToggle = !_micToggle;
     });
-    _engine.muteLocalAudioStream(_micToggle);
+    _engine?.muteLocalAudioStream(_micToggle);
   }
 
   // void _onToggleAllRemoteAudioMute() {
@@ -519,10 +509,10 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
     setState(() {
       _cameraToggle = !_cameraToggle;
     });
-    _engine.muteLocalVideoStream(_cameraToggle);
+    _engine?.muteLocalVideoStream(_cameraToggle);
   }
 
   void _onSwitchCamera() {
-    _engine.switchCamera();
+    _engine?.switchCamera();
   }
 }

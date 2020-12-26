@@ -14,7 +14,7 @@ class BottomBarButton extends StatelessWidget {
   const BottomBarButton({
     this.onTap,
     this.color,
-    this.icon,
+    @required this.icon,
     this.iconColor,
     this.borderColor,
     this.iconSize,

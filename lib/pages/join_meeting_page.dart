@@ -13,6 +13,8 @@ class JoinMeetingPage extends StatefulWidget {
 }
 
 class _JoinMeetingPageState extends State<JoinMeetingPage> {
+  bool _micToggle = true;
+  bool _cameraToggle = true;
   final _meetingIdController = TextEditingController();
 
   Future<void> _joinChannel(String channelId) async {
@@ -103,6 +105,8 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                   return null;
                 },
               ),
+              SizedBox(height: 20.0),
+              _meetingOptions(),
               SizedBox(height: 40.0),
               CustomRoundedButton(
                 onTap: () {
@@ -112,6 +116,57 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
               )
             ],
           ),
+        ),
+      );
+
+  Container _meetingOptions() => Container(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  CAMERA.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Switch(
+                  value: _cameraToggle,
+                  onChanged: (value) {
+                    setState(() {
+                      _cameraToggle = !_cameraToggle;
+                    });
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ],
+            ),
+            Divider(color: Theme.of(context).accentColor),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AUDIO.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Switch(
+                  value: _micToggle,
+                  onChanged: (value) {
+                    setState(() {
+                      _micToggle = !_micToggle;
+                    });
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ],
+            ),
+            Divider(color: Theme.of(context).accentColor),
+          ],
         ),
       );
 }
