@@ -3,10 +3,10 @@ description: A video calling Flutter application for Android and iOS.
 
 publish_to: 'none'
 
-version: 1.0.4+1
+version: 1.0.4+7
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -26,8 +26,7 @@ dependencies:
   get_time_ago: ^0.1.6
 
   device_info: ^1.0.0
-  #package_info: ^0.4.3
-  package_info_plus: ^0.6.3
+  package_info: ^0.4.3+2
   version: ^1.2.0
   url_launcher: ^5.7.10
   share: ^0.6.5+4

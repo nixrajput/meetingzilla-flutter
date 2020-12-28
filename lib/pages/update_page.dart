@@ -6,7 +6,7 @@ import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_setting_btn.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
 class UpdatePage extends StatefulWidget {

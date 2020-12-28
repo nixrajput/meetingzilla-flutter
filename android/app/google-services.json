@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "372793497352-cqcd6muvbn53q9duprvkgmqgkbsaes1c.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.nixlab.meetingzilla",
-            "certificate_hash": "e2dd68ab653e20226efe09241efdf8ddc5d74437"
-          }
-        },
-        {
           "client_id": "372793497352-efa8cuhkognivtkidcp3vp9tmh6mg9l1.apps.googleusercontent.com",
           "client_type": 3
         }

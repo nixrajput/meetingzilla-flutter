@@ -7,7 +7,7 @@ import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
@@ -47,55 +47,60 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       setState(() {
         _packageInfo = packageInfo;
       });
+
+      try {
+        await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
+          if (appInfoSnapshot.exists) {
+            final String latVer = appInfoSnapshot.data()[LATEST_VER];
+            final int latBuildNo =
+                appInfoSnapshot.data()['latest_build_number'];
+            int major = int.parse(_packageInfo.version.substring(0, 1));
+            int minor = int.parse(_packageInfo.version.substring(2, 3));
+            int patch = int.parse(
+                _packageInfo.version.substring(4, _packageInfo.version.length));
+            int currBuildNo = int.parse(_packageInfo.buildNumber);
+            print('$VERSION : $major.$minor.$patch');
+            print('LATEST $VERSION: $latVer');
+            final Version currVer = Version(major, minor, patch);
+            final Version latVersion = Version.parse(latVer);
+
+            if (latVersion > currVer || latBuildNo > currBuildNo) {
+              setState(() {
+                _hasUpdate = true;
+                _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
+                _changelog = appInfoSnapshot.data()[CHANGELOG];
+                _latVer = latVersion;
+              });
+            }
+            if (!_hasUpdate && !_isLoading && !_hasError) {
+              _navigateToPage();
+            }
+          } else {
+            setState(() {
+              _hasError = true;
+              _message = "User data doesn't not exists.";
+              _isLoading = false;
+            });
+          }
+        });
+      } on Exception catch (ex) {
+        setState(() {
+          _hasError = true;
+          _message = ex.toString();
+          _isLoading = false;
+        });
+      }
     } on Exception catch (e) {
       setState(() {
         _hasError = true;
         _message = e.toString();
         _isLoading = false;
       });
-    }
-    try {
-      await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
-        if (appInfoSnapshot.exists) {
-          final ver = appInfoSnapshot.data()[LATEST_VER];
-          int major = int.parse(_packageInfo.version.substring(0, 1));
-          int minor = int.parse(_packageInfo.version.substring(2, 3));
-          int patch = int.parse(
-              _packageInfo.version.substring(4, _packageInfo.version.length));
-          print('$VERSION : $major.$minor.$patch');
-          print('LATEST $VERSION: $ver');
-          final Version currVer = Version(major, minor, patch);
-          final Version latVer = Version.parse(ver);
-
-          if (latVer > currVer) {
-            setState(() {
-              _hasUpdate = true;
-              _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
-              _changelog = appInfoSnapshot.data()[CHANGELOG];
-              _latVer = latVer;
-            });
-          }
-          if (!_hasUpdate && !_isLoading && !_hasError) {
-            _navigateToPage();
-          }
-        } else {
-          setState(() {
-            _hasError = true;
-            _message = "User data doesn't not exists.";
-            _isLoading = false;
-          });
-        }
-      });
-    } on Exception catch (ex) {
+    } finally {
       setState(() {
-        _hasError = true;
-        _message = ex.toString();
         _isLoading = false;
       });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   void _navigateToDownloadUrl() async {
