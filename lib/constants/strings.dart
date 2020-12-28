@@ -61,7 +61,7 @@ const LOGIN_SUCCESS = 'Logged In Successfully.';
 const MORE_OPTIONS = 'More Options';
 const RECORD = 'Record';
 const CHAT = 'Chat';
-const CHANGELOG = 'changelog';
+const CHANGELOG = 'Changelog';
 const VERSION = 'Version';
 const NEW_MEETING = 'New Meeting';
 const CAMERA = 'Camera';
@@ -78,6 +78,7 @@ const CO_HOST = 'CO-HOST';
 const CLIENT = 'CLIENT';
 const JOINED_AT = 'joinedAt';
 const END_AT = 'endAt';
+const CHECK_UPDATE = 'Check For Update';
 
 /// FIREBASE CONSTANTS
 const APP_INFO_REF = 'app_info';

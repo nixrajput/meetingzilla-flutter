@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/models/meeting.dart';
 import 'package:meetingzilla/pages/conference_calling_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/utils/util_functions.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
-import 'package:meetingzilla/widgets/custom_dropdown_btn.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 
 class StartMeetingPage extends StatefulWidget {
@@ -24,15 +22,16 @@ class StartMeetingPage extends StatefulWidget {
 class _StartMeetingPageState extends State<StartMeetingPage> {
   bool _micToggle = true;
   bool _cameraToggle = true;
-  List<Meeting> _meetings = Meeting.getCompanies();
-  List<DropdownMenuItem<Meeting>> _dropdownMenuItems;
-  Meeting _selectedCompany;
 
-  void _onChangeDropdownItem(Meeting selectedCompany) {
-    setState(() {
-      _selectedCompany = selectedCompany;
-    });
-  }
+  //List<Meeting> _meetings = Meeting.getCompanies();
+  //List<DropdownMenuItem<Meeting>> _dropdownMenuItems;
+  // Meeting _selectedCompany;
+  //
+  // void _onChangeDropdownItem(Meeting selectedCompany) {
+  //   setState(() {
+  //     _selectedCompany = selectedCompany;
+  //   });
+  // }
 
   Future<void> _createChannel() async {
     await handleCameraAndMic();
@@ -53,28 +52,28 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
   @override
   void initState() {
     super.initState();
-    _dropdownMenuItems = _buildDropdownMenuItems(_meetings);
-    _selectedCompany = _dropdownMenuItems[0].value;
+    //_dropdownMenuItems = _buildDropdownMenuItems(_meetings);
+    //_selectedCompany = _dropdownMenuItems[0].value;
   }
 
-  List<DropdownMenuItem<Meeting>> _buildDropdownMenuItems(List meetings) {
-    List<DropdownMenuItem<Meeting>> items = List();
-    for (Meeting meeting in meetings) {
-      items.add(
-        DropdownMenuItem(
-          value: meeting,
-          child: Text(
-            meeting.type,
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      );
-    }
-    return items;
-  }
+  // List<DropdownMenuItem<Meeting>> _buildDropdownMenuItems(List meetings) {
+  //   List<DropdownMenuItem<Meeting>> items = List();
+  //   for (Meeting meeting in meetings) {
+  //     items.add(
+  //       DropdownMenuItem(
+  //         value: meeting,
+  //         child: Text(
+  //           meeting.type,
+  //           style: TextStyle(
+  //             fontSize: 18.0,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //   return items;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +183,8 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
                 ),
               ],
             ),
-            Divider(color: Theme.of(context).accentColor),
+            //Divider(color: Theme.of(context).accentColor),
+            SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -206,21 +206,21 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
                 ),
               ],
             ),
-            Divider(color: Theme.of(context).accentColor),
-            DropdownButtonHideUnderline(
-              child: CustomDropdownButton(
-                items: _dropdownMenuItems,
-                value: _selectedCompany,
-                onChanged: _onChangeDropdownItem,
-                hint: Text(
-                  MEETING_TYPE,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            // Divider(color: Theme.of(context).accentColor),
+            // DropdownButtonHideUnderline(
+            //   child: CustomDropdownButton(
+            //     items: _dropdownMenuItems,
+            //     value: _selectedCompany,
+            //     onChanged: _onChangeDropdownItem,
+            //     hint: Text(
+            //       MEETING_TYPE,
+            //       style: TextStyle(
+            //         fontSize: 18.0,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       );

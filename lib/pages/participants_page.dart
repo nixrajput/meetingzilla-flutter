@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/rounded_network_image.dart';
-import 'package:provider/provider.dart';
 
 class ParticipantsPage extends StatefulWidget {
   final users;
@@ -23,13 +21,13 @@ class ParticipantsPage extends StatefulWidget {
 }
 
 class _ParticipantsPageState extends State<ParticipantsPage> {
-  AuthProvider _authProvider;
-  List<String> _users = [];
+  //AuthProvider _authProvider;
+  // List<String> _users = [];
 
   @override
   void initState() {
     super.initState();
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
+    //_authProvider = Provider.of<AuthProvider>(context, listen: false);
   }
 
   @override

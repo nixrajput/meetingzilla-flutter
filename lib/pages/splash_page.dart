@@ -7,7 +7,7 @@ import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
@@ -26,8 +26,12 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   var _downloadUrl;
   var _latVer;
   List<dynamic> _changelog;
-  AnimationController _animationController;
-  PackageInfo _packageInfo;
+  PackageInfo _packageInfo = PackageInfo(
+    appName: UNKNOWN,
+    packageName: UNKNOWN,
+    version: UNKNOWN,
+    buildNumber: UNKNOWN,
+  );
 
   @override
   void initState() {
@@ -35,17 +39,13 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     _initializeApp();
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
     _authProvider.checkUserInfo();
-    _animationController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    _animationController.repeat();
   }
 
   Future<void> _initializeApp() async {
     try {
-      await PackageInfo.fromPlatform().then((info) {
-        setState(() {
-          _packageInfo = info;
-        });
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      setState(() {
+        _packageInfo = packageInfo;
       });
     } on Exception catch (e) {
       setState(() {
@@ -130,7 +130,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _animationController.dispose();
     super.dispose();
   }
 

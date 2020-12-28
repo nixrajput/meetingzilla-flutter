@@ -144,7 +144,8 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                 ),
               ],
             ),
-            Divider(color: Theme.of(context).accentColor),
+            //Divider(color: Theme.of(context).accentColor),
+            SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -166,7 +167,6 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                 ),
               ],
             ),
-            Divider(color: Theme.of(context).accentColor),
           ],
         ),
       );

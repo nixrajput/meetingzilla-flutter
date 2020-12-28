@@ -27,17 +27,18 @@ class BottomBarButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(padding ?? 8.0),
+        padding: EdgeInsets.all(padding ?? 10.0),
         margin: EdgeInsets.all(margin ?? 0.0),
         decoration: BoxDecoration(
-            color: color ?? Colors.transparent,
-            shape: BoxShape.circle,
-            border: Border(
-              top: BorderSide(color: borderColor ?? Colors.white),
-              bottom: BorderSide(color: borderColor ?? Colors.white),
-              left: BorderSide(color: borderColor ?? Colors.white),
-              right: BorderSide(color: borderColor ?? Colors.white),
-            )),
+          color: color ?? Colors.transparent,
+          shape: BoxShape.circle,
+          border: Border(
+            top: BorderSide(color: borderColor ?? Colors.white),
+            bottom: BorderSide(color: borderColor ?? Colors.white),
+            left: BorderSide(color: borderColor ?? Colors.white),
+            right: BorderSide(color: borderColor ?? Colors.white),
+          ),
+        ),
         child: FaIcon(
           icon,
           color: iconColor ?? Colors.white,

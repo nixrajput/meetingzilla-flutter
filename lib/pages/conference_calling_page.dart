@@ -8,13 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/strings.dart';
-import 'package:meetingzilla/pages/participants_page.dart';
+import 'package:meetingzilla/pages/channel_setting_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
-import 'package:meetingzilla/providers/channel_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/bottom_bar_btn.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
-import 'package:meetingzilla/widgets/custom_icon_btn.dart';
+import 'package:meetingzilla/widgets/custom_text_icon_btn.dart';
 import 'package:meetingzilla/widgets/setting_custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
@@ -43,10 +42,14 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   bool _micToggle;
   bool _cameraToggle;
   RtcEngine _engine;
-  bool _connecting = false, _isJoined = false, _switchRender = true;
+  bool _connecting = false;
+
+  // bool _isJoined = false;
+  bool _switchRender = false;
   int _uid;
   AuthProvider _authProvider;
-  ChannelProvider _channelProvider;
+
+  //ChannelProvider _channelProvider;
 
   List<int> _participants = [];
 
@@ -92,6 +95,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   Future<void> _initAgoraRtcEngine() async {
     _engine = await RtcEngine.create(APP_ID);
     await _engine?.enableVideo();
+    //await _engine?.enableEncryption(true, EncryptionConfig(EncryptionMode.AES256XTS, ''));
     await _engine?.setChannelProfile(ChannelProfile.Communication);
   }
 
@@ -111,7 +115,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
           print(info);
           setState(() {
             _uid = uid;
-            _isJoined = true;
+            //_isJoined = true;
           });
           Fluttertoast.showToast(
             msg: 'You joined.',
@@ -143,7 +147,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
         leaveChannel: (stats) {
           log('leaveChannel ${stats.toJson()}');
           setState(() {
-            _isJoined = false;
+            //_isJoined = false;
             _participants.clear();
           });
         },
@@ -201,11 +205,11 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   void initState() {
     super.initState();
     setState(() {
-      _cameraToggle = widget.cameraToggle ?? true;
-      _micToggle = widget.micToggle ?? true;
+      _cameraToggle = !widget.cameraToggle ?? false;
+      _micToggle = !widget.micToggle ?? false;
     });
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
-    _channelProvider = Provider.of<ChannelProvider>(context, listen: false);
+    //_channelProvider = Provider.of<ChannelProvider>(context, listen: false);
     initialize();
   }
 
@@ -226,6 +230,8 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
   Widget build(BuildContext context) {
     final bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
+
+    final bodyWidth = MediaQuery.of(context).size.width;
     return StreamBuilder(
       stream: FirebaseFunctions.meetingCollection
           .doc(widget.meetingId)
@@ -242,84 +248,348 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
             : SafeArea(
                 child: _renderVideo(
                 bodyHeight,
+                bodyWidth,
                 _meetingSnapshots,
               )),
       ),
     );
   }
 
-  void switchRender(int uid) {
+  void _switchVideoRender() {
     setState(() {
       _switchRender = !_switchRender;
     });
   }
 
-  Widget _renderVideo(bodyHeight, AsyncSnapshot meetingSnapshots) {
+  //bool _maxVideo = false;
+
+  // void _maximizeVideo() {
+  //   setState(() {
+  //     _maxVideo = !_maxVideo;
+  //   });
+  // }
+
+  Widget _renderVideo(
+      double bodyHeight, double bodyWidth, AsyncSnapshot meetingSnapshots) {
     return Stack(
       children: [
-        RtcLocalView.SurfaceView(),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Column(
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length == 1)
+          Container(
+            child: RtcRemoteView.SurfaceView(uid: _participants[0]),
+          ),
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length == 2)
+          Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (_participants != null && _participants.isNotEmpty)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Row(
-                      children:
-                          List.of(_participants.map((uid) => GestureDetector(
-                                onTap: () => switchRender(uid),
-                                child: Container(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 16.0,
-                                          offset: Offset.zero,
-                                        )
-                                      ]),
-                                  width: 100.0,
-                                  height: 120.0,
-                                  child: Stack(
-                                    children: [
-                                      RtcRemoteView.SurfaceView(uid: uid),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 4.0,
-                                          left: 4.0,
-                                        ),
-                                        child: Text(
-                                          uid.toString(),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ))),
-                    ),
-                  ),
-                ),
-              _floatingControlBar(),
+              _expandedVideo(RtcRemoteView.SurfaceView(uid: _participants[0])),
+              _expandedVideo(RtcRemoteView.SurfaceView(uid: _participants[1])),
             ],
           ),
-        ),
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length == 3)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[0])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[1])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[2])),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length == 4)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[0])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[1])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[2])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[3])),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length == 5)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[0])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[1])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[2])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[3])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[4])),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length == 6)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[0])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[1])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[2])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[3])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[4])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[5])),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        if (_participants != null &&
+            _participants.isNotEmpty &&
+            _participants.length > 6)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[0])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[1])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[2])),
+                    _expandedVideo(
+                        RtcRemoteView.SurfaceView(uid: _participants[3])),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  physics: ScrollPhysics(),
+                  children: List.of(_participants
+                      .sublist(4, _participants.length)
+                      .map((u) => Container(
+                            width: bodyWidth / 3,
+                            child: RtcRemoteView.SurfaceView(uid: u),
+                          ))),
+                ),
+              ),
+            ],
+          ),
+        _participants.isEmpty
+            ? RtcLocalView.SurfaceView()
+            : Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Draggable(
+                      feedback: GestureDetector(
+                        onDoubleTap: _switchVideoRender,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 16.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 16.0,
+                                offset: Offset.zero,
+                              )
+                            ],
+                          ),
+                          width: 100.0,
+                          height: 120.0,
+                          child: RtcLocalView.SurfaceView(),
+                        ),
+                      ),
+                      childWhenDragging: SizedBox(),
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 16.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 16.0,
+                              offset: Offset.zero,
+                            )
+                          ],
+                        ),
+                        width: 100.0,
+                        height: 120.0,
+                        child: RtcLocalView.SurfaceView(),
+                      ),
+                    ),
+                    if (_participants.isNotEmpty) _floatingControlBar()
+                  ],
+                ),
+              ),
+        if (_participants.isEmpty)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _floatingControlBar(),
+          ),
       ],
+    );
+
+    // if (_switchRender) {
+    //   return Stack(
+    //     children: [
+    //       RtcLocalView.SurfaceView(),
+    //       Align(
+    //         alignment: Alignment.bottomCenter,
+    //         child: Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           crossAxisAlignment: CrossAxisAlignment.stretch,
+    //           children: [
+    //             if (_participants != null && _participants.isNotEmpty)
+    //               SingleChildScrollView(
+    //                 scrollDirection: Axis.horizontal,
+    //                 child: Padding(
+    //                   padding: const EdgeInsets.only(left: 8.0),
+    //                   child: Row(
+    //                     children:
+    //                         List.of(_participants.map((uid) => GestureDetector(
+    //                               onDoubleTap: _maximizeVideo,
+    //                               child: Draggable(
+    //                                 feedback: _floatingVideoCard(uid),
+    //                                 child: _floatingVideoCard(uid),
+    //                                 childWhenDragging: Container(),
+    //                               ),
+    //                             ))),
+    //                   ),
+    //                 ),
+    //               ),
+    //             _floatingControlBar(),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   );
+    // } else {
+    //
+    // }
+  }
+
+  Widget _expandedVideo(Widget child) {
+    return Expanded(
+      child: Container(
+        // decoration: BoxDecoration(
+        //   border: Border(
+        //     top: BorderSide(color: Colors.white),
+        //     bottom: BorderSide(color: Colors.white),
+        //     left: BorderSide(color: Colors.white),
+        //     right: BorderSide(color: Colors.white),
+        //   ),
+        // ),
+        child: child,
+      ),
     );
   }
 
   Container _floatingControlBar() => Container(
         color: Colors.transparent,
+        width: double.infinity,
         padding: const EdgeInsets.only(
           top: 8.0,
           bottom: 8.0,
@@ -331,38 +601,43 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             BottomBarButton(
-              onTap: () => _onCallEnd(context),
+              onTap: () => _leaveChannel(context),
               icon: FontAwesomeIcons.times,
               color: Colors.red,
               borderColor: Colors.red,
               padding: 20.0,
             ),
-            BottomBarButton(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ParticipantsPage(
-                      users: _participants,
-                    ),
-                  ),
-                );
-              },
-              icon: FontAwesomeIcons.users,
-            ),
+            // BottomBarButton(
+            //   onTap: () {
+            //     // Navigator.push(
+            //     //   context,
+            //     //   MaterialPageRoute(
+            //     //     builder: (_) => ParticipantsPage(
+            //     //       users: _participants,
+            //     //     ),
+            //     //   ),
+            //     // );
+            //     setState(() {
+            //       _participants.add(randomIntNumeric(8));
+            //     });
+            //   },
+            //   icon: FontAwesomeIcons.users,
+            // ),
             BottomBarButton(
               onTap: _onToggleAudioMute,
-              icon: !_micToggle
+              icon: _micToggle
                   ? FontAwesomeIcons.microphoneSlash
                   : FontAwesomeIcons.microphone,
-              color: !_micToggle ? Colors.redAccent : Colors.transparent,
+              color: _micToggle ? Colors.red : Colors.transparent,
+              borderColor: _micToggle ? Colors.red : Colors.white,
             ),
             BottomBarButton(
               onTap: _onToggleVideoMute,
-              icon: !_cameraToggle
+              icon: _cameraToggle
                   ? FontAwesomeIcons.videoSlash
                   : FontAwesomeIcons.video,
-              color: !_cameraToggle ? Colors.redAccent : Colors.transparent,
+              color: _cameraToggle ? Colors.red : Colors.transparent,
+              borderColor: _cameraToggle ? Colors.red : Colors.white,
             ),
             BottomBarButton(
               onTap: () => _showMoreOptionsBottomSheet(context),
@@ -451,21 +726,24 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: FontAwesomeIcons.infoCircle,
                     iconColor: Theme.of(context).accentColor,
+                    title: 'View Info',
                     onTap: () {
                       _showDetailsBottomSheet(ctx);
                     },
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: FontAwesomeIcons.exchangeAlt,
                     iconColor: Theme.of(context).accentColor,
+                    title: 'Switch Camera',
                     onTap: _onSwitchCamera,
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: FontAwesomeIcons.shareAlt,
                     iconColor: Theme.of(context).accentColor,
+                    title: 'Invite',
                     onTap: () {},
                   ),
                 ],
@@ -473,19 +751,30 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: FontAwesomeIcons.chromecast,
                     iconColor: Theme.of(context).accentColor,
+                    title: 'Screen Share',
                     onTap: () {},
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: FontAwesomeIcons.bug,
                     iconColor: Theme.of(context).accentColor,
+                    title: 'Report',
                     onTap: () {},
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: FontAwesomeIcons.cog,
-                    onTap: () {},
+                    iconColor: Theme.of(context).accentColor,
+                    title: 'Settings',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ChannelSettingsPage(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -494,7 +783,8 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
         ),
       );
 
-  void _onCallEnd(BuildContext context) async {
+  void _leaveChannel(BuildContext context) async {
+    await _engine?.leaveChannel();
     await FirebaseFunctions.meetingCollection
         .doc(widget.meetingId)
         .collection(PARTICIPANTS.toLowerCase())

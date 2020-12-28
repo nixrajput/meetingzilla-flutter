@@ -7,11 +7,13 @@ import 'package:meetingzilla/pages/splash_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/providers/channel_provider.dart';
 import 'package:meetingzilla/utils/custom_route.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await PackageInfo.fromPlatform();
   runApp(MyApp());
 }
 

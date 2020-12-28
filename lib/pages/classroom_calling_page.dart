@@ -10,7 +10,7 @@ import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/participants_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/widgets/bottom_bar_btn.dart';
-import 'package:meetingzilla/widgets/custom_icon_btn.dart';
+import 'package:meetingzilla/widgets/custom_text_icon_btn.dart';
 import 'package:meetingzilla/widgets/setting_custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
@@ -480,17 +480,17 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: Icons.chat_bubble_outline_outlined,
                     title: '$CHAT',
                     onTap: () {},
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: Icons.screen_share_outlined,
                     title: '$SCREEN_SHARE',
                     onTap: () {},
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: Icons.fiber_smart_record_outlined,
                     title: '$RECORD',
                     onTap: () {},
@@ -500,17 +500,17 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: Icons.report_problem_outlined,
                     title: 'Report problem',
                     onTap: () {},
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: Icons.report_outlined,
                     title: 'Report Abuse',
                     onTap: () {},
                   ),
-                  CustomIconButton(
+                  CustomTextIconButton(
                     icon: Icons.settings_outlined,
                     title: 'Settings',
                     onTap: () {},

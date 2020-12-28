@@ -8,9 +8,9 @@ class CustomSettingButton extends StatelessWidget {
   final Color bgColor;
   final Color arrowColor;
   final VoidCallback onTap;
+  final Widget subtitle;
 
   const CustomSettingButton({
-    Key key,
     this.title,
     this.icon,
     this.onTap,
@@ -18,7 +18,8 @@ class CustomSettingButton extends StatelessWidget {
     this.iconColor,
     this.arrowColor,
     this.bgColor,
-  }) : super(key: key);
+    this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +53,16 @@ class CustomSettingButton extends StatelessWidget {
                 ),
               ],
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: titleColor ?? arrowColor,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (subtitle != null) subtitle,
+                SizedBox(width: 10.0),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: titleColor ?? arrowColor,
+                ),
+              ],
             ),
           ],
         ),
