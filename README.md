@@ -7,7 +7,7 @@ A video calling `Flutter` application for `Android` and `iOS`.
 
 
 ## Connect With Me
-[<img align="left" alt="nixrajput | GitHub" width="24px" src="/screenshots/icons/github-brands.svg" />][website]
+[<img align="left" alt="nixrajput | GitHub" width="24px" fg="#FFFFFF" src="/screenshots/icons/github-brands.svg" />][website]
 [<img align="left" alt="nixrajput | Facebook" width="24px" src="/screenshots/icons/facebook-brands.svg" />][facebook]
 [<img align="left" alt="nixrajput | Twitter" width="24px" src="/screenshots/icons/twitter-brands.svg" />][twitter]
 [<img align="left" alt="nixrajput | LinkedIn" width="24px" src="/screenshots/icons/linkedin-in-brands.svg" />][linkedin]
