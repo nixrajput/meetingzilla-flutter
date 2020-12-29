@@ -10,9 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
-import 'package:meetingzilla/widgets/bottom_sheet_button.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
+import 'package:meetingzilla/widgets/custom_setting_btn.dart';
 import 'package:meetingzilla/widgets/rounded_linear_progress_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -96,7 +96,6 @@ class _UploadImagePageState extends State<UploadImagePage>
             "Uploading...",
             style: TextStyle(
               fontSize: 18.0,
-              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -112,7 +111,6 @@ class _UploadImagePageState extends State<UploadImagePage>
                   "${_percent.toStringAsFixed(0)} %",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -125,7 +123,6 @@ class _UploadImagePageState extends State<UploadImagePage>
   }
 
   Container _bottomBodyArea(height) => Container(
-        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -140,9 +137,12 @@ class _UploadImagePageState extends State<UploadImagePage>
               ),
               if (_imageFile != null) SizedBox(height: 40.0),
               if (_imageFile != null)
-                CustomRoundedButton(
-                  title: UPLOAD.toUpperCase(),
-                  onTap: _uploadImage,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: CustomRoundedButton(
+                    title: UPLOAD.toUpperCase(),
+                    onTap: _uploadImage,
+                  ),
                 ),
             ],
           ),
@@ -236,45 +236,48 @@ class _UploadImagePageState extends State<UploadImagePage>
 
   void _showImageBottomSheet(BuildContext context) {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16.0),
-            topRight: Radius.circular(16.0),
-          ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8.0),
+          topRight: Radius.circular(8.0),
         ),
-        context: context,
-        builder: (ctx) => Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 16.0,
-                horizontal: 16.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  BottomSheetButton(
-                    title: "Camera",
-                    icon: Icons.camera,
-                    onTap: () async {
-                      await _pickImage(ImageSource.camera);
-                    },
-                  ),
-                  BottomSheetButton(
-                    title: "Gallery",
-                    icon: Icons.photo,
-                    onTap: () async {
-                      await _pickImage(ImageSource.gallery);
-                    },
-                  ),
-                ],
-              ),
-            ));
+      ),
+      context: context,
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CustomSettingButton(
+              bgColor: Colors.transparent,
+              icon: FontAwesomeIcons.camera,
+              title: CAMERA,
+              onTap: () async {
+                Navigator.pop(context);
+                await _pickImage(ImageSource.camera);
+              },
+            ),
+            SizedBox(height: 8.0),
+            CustomSettingButton(
+              bgColor: Colors.transparent,
+              icon: FontAwesomeIcons.images,
+              title: GALLERY,
+              onTap: () async {
+                Navigator.pop(context);
+                await _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _imageArea() {
     if (_imageFile != null) {
       return AvatarGlow(
         startDelay: Duration(milliseconds: 1000),
-        glowColor: Colors.grey.shade900,
+        glowColor: Colors.grey,
         endRadius: 120.0,
         duration: Duration(milliseconds: 2000),
         repeat: true,
@@ -291,7 +294,7 @@ class _UploadImagePageState extends State<UploadImagePage>
     }
     return AvatarGlow(
       startDelay: Duration(milliseconds: 1000),
-      glowColor: Colors.grey.shade900,
+      glowColor: Colors.grey,
       endRadius: 120.0,
       duration: Duration(milliseconds: 2000),
       repeat: true,
@@ -301,13 +304,13 @@ class _UploadImagePageState extends State<UploadImagePage>
       curve: Curves.fastOutSlowIn,
       child: CircleAvatar(
         radius: 100.0,
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Colors.grey[550],
         child: Text(
           "Add Image",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).textTheme.subtitle1.color,
           ),
         ),
       ),

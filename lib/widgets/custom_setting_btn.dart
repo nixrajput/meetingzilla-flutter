@@ -26,11 +26,8 @@ class CustomSettingButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 10.0,
-        ),
-        color: bgColor ?? Colors.white,
+        padding: const EdgeInsets.all(8.0),
+        color: bgColor ?? Theme.of(context).scaffoldBackgroundColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -47,8 +44,9 @@ class CustomSettingButton extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: titleColor,
+                    fontWeight: FontWeight.w600,
+                    color: titleColor ??
+                        Theme.of(context).textTheme.subtitle1.color,
                   ),
                 ),
               ],

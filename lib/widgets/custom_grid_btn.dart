@@ -1,49 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/colors.dart';
 
 class CustomGridButton extends StatelessWidget {
   final IconData icon;
   final String title;
-  final VoidCallback onPressed;
+  final Color bgColor;
+  final VoidCallback onTap;
+  final double padding;
+  final double margin;
 
   const CustomGridButton({
     this.icon,
     this.title,
-    this.onPressed,
+    this.onTap,
+    this.bgColor,
+    this.padding,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
+    final double bodyWidth = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
+        margin: EdgeInsets.all(margin ?? 8.0),
+        padding: EdgeInsets.all(padding ?? 16.0),
+        width: (bodyWidth / 2) - 24.0,
+        height: (bodyWidth / 2) - 24.0,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          // color: bgColor,
-          gradient: LinearGradient(
-            colors: [
-              firstColor,
-              secondColor,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            color: bgColor ?? Theme.of(context).bottomAppBarColor,
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor,
+                offset: Offset(0.0, 0.0),
+                blurRadius: 8.0,
+              )
+            ]),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            FaIcon(
               icon,
-              size: 48.0,
-              color: Colors.white,
+              size: 32.0,
             ),
+            SizedBox(height: 4.0),
             Text(
               title,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
               ),
             ),
           ],

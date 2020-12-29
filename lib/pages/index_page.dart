@@ -59,7 +59,7 @@ class IndexState extends State<IndexPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            _bottomBodyArea(bodyHeight),
+            _createPageView(bodyHeight),
             Align(
               alignment: Alignment.bottomCenter,
               child: _bottomAppBar(),
@@ -70,7 +70,7 @@ class IndexState extends State<IndexPage> {
     );
   }
 
-  PageView _bottomBodyArea(height) => PageView(
+  PageView _createPageView(height) => PageView(
         controller: _pageController,
         onPageChanged: (index) {
           _pageChanged(index);
@@ -84,18 +84,19 @@ class IndexState extends State<IndexPage> {
       );
 
   Widget _bottomAppBar() => Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                offset: Offset(0.0, 0.0),
-                blurRadius: 8.0,
-              )
-            ]),
+          color: Theme.of(context).bottomAppBarColor,
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              offset: Offset(0.0, 2.0),
+              blurRadius: 8.0,
+            )
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,

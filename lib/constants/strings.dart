@@ -79,6 +79,7 @@ const CLIENT = 'CLIENT';
 const JOINED_AT = 'joinedAt';
 const END_AT = 'endAt';
 const CHECK_UPDATE = 'Check For Update';
+const GALLERY = 'Gallery';
 
 /// FIREBASE CONSTANTS
 const APP_INFO_REF = 'app_info';

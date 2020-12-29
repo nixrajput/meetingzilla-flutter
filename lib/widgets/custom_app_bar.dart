@@ -6,6 +6,9 @@ class CustomAppBar extends StatelessWidget {
   final Color titleColor;
   final Widget leading;
   final Widget trailing;
+  final Color bgColor;
+  final EdgeInsets padding;
+  final double elevation;
 
   const CustomAppBar({
     @required this.title,
@@ -13,15 +16,26 @@ class CustomAppBar extends StatelessWidget {
     this.titleColor,
     this.leading,
     this.trailing,
+    this.padding,
+    this.bgColor,
+    this.elevation = 0.0,
   }) : assert(title != null, 'Title must not be null.');
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        left: 8.0,
-        right: 8.0,
+      padding: padding ?? const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: bgColor ?? Theme.of(context).scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: elevation > 0.0
+                ? Colors.black.withOpacity(0.15)
+                : Colors.transparent,
+            offset: Offset(0.0, elevation ?? 0.0),
+            blurRadius: elevation ?? 8.0,
+          )
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

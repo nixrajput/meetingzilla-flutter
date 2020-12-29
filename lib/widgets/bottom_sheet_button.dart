@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomSheetButton extends StatelessWidget {
   final String title;
@@ -19,10 +20,10 @@ class BottomSheetButton extends StatelessWidget {
         onTap();
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Icon(
+            FaIcon(
               icon,
               color: Colors.grey,
             ),

@@ -5,7 +5,7 @@ import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/about_page.dart';
 import 'package:meetingzilla/pages/login_page.dart';
 import 'package:meetingzilla/pages/update_page.dart';
-import 'package:meetingzilla/pages/upload_image.dart';
+import 'package:meetingzilla/pages/upload_image_page.dart';
 import 'package:meetingzilla/pages/welcome_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
@@ -63,7 +63,7 @@ class _SettingsViewState extends State<SettingsView> {
     if (_imageUrl != null) {
       return AvatarGlow(
         startDelay: Duration(milliseconds: 1000),
-        glowColor: Colors.grey.shade900,
+        glowColor: Colors.grey,
         endRadius: 120.0,
         duration: Duration(milliseconds: 2000),
         repeat: true,
@@ -85,7 +85,7 @@ class _SettingsViewState extends State<SettingsView> {
     }
     return AvatarGlow(
       startDelay: Duration(milliseconds: 1000),
-      glowColor: Colors.grey.shade900,
+      glowColor: Colors.grey,
       endRadius: 120.0,
       duration: Duration(milliseconds: 2000),
       repeat: true,
@@ -95,7 +95,7 @@ class _SettingsViewState extends State<SettingsView> {
       curve: Curves.fastOutSlowIn,
       child: CircleAvatar(
         radius: 100.0,
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Colors.grey[550],
         child: Text(
           "Add Image",
           style: TextStyle(
@@ -109,7 +109,6 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Container _bottomBodyArea(double height) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -169,18 +168,6 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               CustomSettingButton(
-                title: LOGOUT,
-                titleColor: Colors.redAccent,
-                icon: Icons.logout,
-                onTap: _logOutUser,
-              ),
-              CustomSettingButton(
-                title: REMOVE_USER,
-                titleColor: Colors.redAccent,
-                icon: Icons.delete_forever,
-                onTap: _removeUserData,
-              ),
-              CustomSettingButton(
                 title: UPDATE,
                 titleColor: thirdColor,
                 icon: Icons.repeat,
@@ -192,8 +179,20 @@ class _SettingsViewState extends State<SettingsView> {
                       ));
                 },
               ),
+              CustomSettingButton(
+                title: LOGOUT,
+                titleColor: Colors.redAccent,
+                icon: Icons.logout,
+                onTap: _logOutUser,
+              ),
+              CustomSettingButton(
+                title: REMOVE_USER,
+                titleColor: Colors.redAccent,
+                icon: Icons.delete_forever,
+                onTap: _removeUserData,
+              ),
               Divider(color: Theme.of(context).accentColor),
-              SizedBox(height: height * 0.2),
+              SizedBox(height: height * 0.15),
             ],
           ),
         ),

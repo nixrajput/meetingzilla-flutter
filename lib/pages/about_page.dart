@@ -62,7 +62,6 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Widget _bottomBodyArea(height) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

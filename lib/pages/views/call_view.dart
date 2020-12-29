@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/join_meeting_page.dart';
@@ -40,92 +41,111 @@ class _CallViewState extends State<CallView> {
 
   Widget _body(double height) => Expanded(
         child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              SizedBox(height: height * 0.03),
-              Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      PID_IS,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "${formatMeetingId(widget.authProvider.meetingId)}",
-                      style: TextStyle(
-                        fontSize: 28.0,
-                        fontWeight: FontWeight.bold,
-                        color: thirdColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: height * 0.05),
-              GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 10.0,
-                  childAspectRatio: 1.0,
-                  crossAxisCount: 2,
-                ),
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                children: [
-                  CustomGridButton(
-                    icon: Icons.video_call_rounded,
-                    title: START_MEETING,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => StartMeetingPage(
-                                    authProvider: widget.authProvider,
-                                  )));
-                      // _createChannel(_authProvider.channelId);
-                    },
-                  ),
-                  CustomGridButton(
-                    icon: Icons.videocam_rounded,
-                    //bgColor: Colors.indigo,
-                    title: JOIN_MEETING,
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => JoinMeetingPage()));
-                    },
-                  ),
-                  CustomGridButton(
-                    icon: Icons.schedule_rounded,
-                    //bgColor: Colors.deepPurple,
-                    title: SCHEDULE,
-                    onPressed: () {
-                      Fluttertoast.showToast(
-                        msg: 'This feature is coming soon.',
-                        gravity: ToastGravity.CENTER,
-                      );
-                    },
-                  ),
-                  CustomGridButton(
-                    icon: Icons.screen_share_rounded,
-                    //bgColor: Colors.orangeAccent,
-                    title: SCREEN_SHARE,
-                    onPressed: () {
-                      Fluttertoast.showToast(
-                        msg: 'This feature is coming soon.',
-                        gravity: ToastGravity.CENTER,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: height * 0.04),
+                _meetingIdText(),
+                SizedBox(height: height * 0.05),
+                _createButtons(),
+                SizedBox(height: height * 0.15),
+              ],
+            ),
           ),
+        ),
+      );
+
+  Widget _meetingIdText() => Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              PID_IS,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 4.0),
+            Text(
+              "${formatMeetingId(widget.authProvider.meetingId)}",
+              style: TextStyle(
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+                color: thirdColor,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _createButtons() => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomGridButton(
+                  icon: FontAwesomeIcons.video,
+                  title: START_MEETING,
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => StartMeetingPage(
+                                  authProvider: widget.authProvider,
+                                )));
+                    // _createChannel(_authProvider.channelId);
+                  },
+                ),
+                CustomGridButton(
+                  icon: FontAwesomeIcons.users,
+                  //bgColor: Colors.indigo,
+                  title: JOIN_MEETING,
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => JoinMeetingPage()));
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomGridButton(
+                  icon: FontAwesomeIcons.calendarPlus,
+                  //bgColor: Colors.deepPurple,
+                  title: SCHEDULE,
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: 'This feature is coming soon.',
+                      gravity: ToastGravity.SNACKBAR,
+                    );
+                  },
+                ),
+                CustomGridButton(
+                  icon: FontAwesomeIcons.shareSquare,
+                  title: SCREEN_SHARE,
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: 'This feature is coming soon.',
+                      gravity: ToastGravity.SNACKBAR,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
       );
 }

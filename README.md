@@ -1,6 +1,8 @@
 # Meetingzilla
-<img width="100px" src="/assets/images/icon.png" align="center" alt="MeetingZilla" />
-A video calling `Flutter` application for `Android` and `iOS`.
+<img width="180px" src="/assets/images/icon.png" align="center" alt="MeetingZilla" />
+```
+A video calling `Flutter` application for Android and iOS.
+```
 
 ## Screenshots
 <img width="800px" src="/screenshots/screenshot.png" align="center" alt="Screenshot" />

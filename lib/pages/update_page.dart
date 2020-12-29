@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
@@ -157,7 +156,6 @@ class _UpdatePageState extends State<UpdatePage> {
   }
 
   Container _bottomBodyArea(height) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -167,35 +165,24 @@ class _UpdatePageState extends State<UpdatePage> {
               Divider(color: Theme.of(context).accentColor),
               CustomSettingButton(
                 title: CHECK_UPDATE,
-                titleColor: thirdColor,
                 onTap: _checkUpdate,
                 subtitle: _isLoading
                     ? CustomCircularProgressIndicator(
-                        color: thirdColor,
+                        color: Theme.of(context).accentColor,
                         size: 24.0,
                       )
                     : SizedBox(),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Divider(color: Theme.of(context).accentColor),
-              ),
               CustomSettingButton(
                 title: CHANGELOG,
-                titleColor: thirdColor,
                 onTap: () {},
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Divider(color: Theme.of(context).accentColor),
               ),
               CustomSettingButton(
                 title: VERSION,
-                titleColor: thirdColor,
                 subtitle: Text(
                   '${_packageInfo.version ?? '0'} (${_packageInfo.buildNumber ?? '0'})',
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey,
                   ),

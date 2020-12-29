@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
@@ -18,12 +19,29 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-    );
+    if (SchedulerBinding.instance.window.platformBrightness ==
+        Brightness.light) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
+          statusBarColor: lightBackgroundColor,
+          statusBarBrightness: Brightness.light,
+          systemNavigationBarColor: lightBackgroundColor,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+      );
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+          statusBarColor: materialDarkColor,
+          statusBarBrightness: Brightness.dark,
+          systemNavigationBarColor: materialDarkColor,
+          systemNavigationBarIconBrightness: Brightness.light,
+        ),
+      );
+    }
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
@@ -33,9 +51,21 @@ class MyApp extends StatelessWidget {
         title: APP_NAME,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: lightBackgroundColor,
           primarySwatch: materialAccentColor,
           accentColor: accentColor,
+          bottomAppBarColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.android: CustomPageTransitionBuilder(),
+            TargetPlatform.iOS: CustomPageTransitionBuilder(),
+          }),
+        ),
+        darkTheme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: materialDarkColor,
+          bottomAppBarColor: darkBottomBarColor,
+          bottomSheetTheme:
+              BottomSheetThemeData(backgroundColor: darkBottomBarColor),
           visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: PageTransitionsTheme(builders: {
             TargetPlatform.android: CustomPageTransitionBuilder(),
