@@ -21,6 +21,7 @@ class _UpdatePageState extends State<UpdatePage> {
   var _message;
   var _downloadUrl;
   var _latVer;
+  var _latBuildNo;
   List<dynamic> _changelog;
   PackageInfo _packageInfo = PackageInfo(
     appName: UNKNOWN,
@@ -45,49 +46,59 @@ class _UpdatePageState extends State<UpdatePage> {
       setState(() {
         _packageInfo = packageInfo;
       });
+
+      try {
+        await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
+          if (appInfoSnapshot.exists) {
+            final String latver = appInfoSnapshot.data()[LATEST_VER];
+            final int latBuildNo =
+                appInfoSnapshot.data()['latest_build_number'];
+            int major = int.parse(_packageInfo.version.substring(0, 1));
+            int minor = int.parse(_packageInfo.version.substring(2, 3));
+            int patch = int.parse(
+                _packageInfo.version.substring(4, _packageInfo.version.length));
+            int currBuildNo = int.parse(_packageInfo.buildNumber);
+            print('$VERSION : $major.$minor.$patch');
+            print('LATEST $VERSION: $latver');
+            final Version currVer = Version(major, minor, patch);
+            final Version latVersion = Version.parse(latver);
+
+            if (latVersion > currVer || latBuildNo > currBuildNo) {
+              setState(() {
+                _hasUpdate = true;
+                _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
+                _changelog = appInfoSnapshot.data()[CHANGELOG.toLowerCase()];
+                _latVer = latVersion;
+                _latBuildNo = latBuildNo;
+              });
+            }
+          } else {
+            setState(() {
+              _hasError = true;
+              _message = "User data doesn't not exists.";
+              _isLoading = false;
+            });
+          }
+        });
+      } on Exception catch (ex) {
+        setState(() {
+          _hasError = true;
+          _message = ex.toString();
+          _isLoading = false;
+        });
+      }
     } on Exception catch (e) {
       setState(() {
         _hasError = true;
         _message = e.toString();
         _isLoading = false;
       });
-    }
-    try {
-      await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
-        if (appInfoSnapshot.exists) {
-          final ver = appInfoSnapshot.data()[LATEST_VER];
-          int major = int.parse(_packageInfo.version.substring(0, 1));
-          int minor = int.parse(_packageInfo.version.substring(2, 3));
-          int patch = int.parse(
-              _packageInfo.version.substring(4, _packageInfo.version.length));
-          print('$VERSION : $major.$minor.$patch');
-          print('LATEST $VERSION: $ver');
-          final Version currVer = Version(major, minor, patch);
-          final Version latVer = Version.parse(ver);
-
-          if (latVer > currVer) {
-            setState(() {
-              _hasUpdate = true;
-              _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
-              _changelog = appInfoSnapshot.data()[CHANGELOG];
-              _latVer = latVer;
-            });
-          }
-        } else {
-          setState(() {
-            _hasError = true;
-            _message = "User data doesn't not exists.";
-            _isLoading = false;
-          });
-        }
-      });
-    } on Exception catch (ex) {
+    } finally {
       setState(() {
-        _hasError = true;
-        _message = ex.toString();
         _isLoading = false;
       });
     }
+
     _showUpdateDialog();
   }
 
@@ -139,7 +150,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     child: Text("OK"),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     onPressed: () {
-                      if (!_hasUpdate) Navigator.pop(ctx);
+                      Navigator.pop(ctx);
                     },
                   ),
                 ]));

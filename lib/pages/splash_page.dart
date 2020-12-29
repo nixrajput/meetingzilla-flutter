@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/index_page.dart';
 import 'package:meetingzilla/pages/login_page.dart';
@@ -25,6 +26,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   var _message;
   var _downloadUrl;
   var _latVer;
+  var _latBuildNo;
   List<dynamic> _changelog;
   PackageInfo _packageInfo = PackageInfo(
     appName: UNKNOWN,
@@ -68,8 +70,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               setState(() {
                 _hasUpdate = true;
                 _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
-                _changelog = appInfoSnapshot.data()[CHANGELOG];
+                _changelog = appInfoSnapshot.data()[CHANGELOG.toLowerCase()];
                 _latVer = latVersion;
+                _latBuildNo = latBuildNo;
               });
             }
             if (!_hasUpdate && !_isLoading && !_hasError) {
@@ -225,32 +228,38 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       '$UPDATE_WARNING',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),
                     ),
                     Text(
-                      '${VERSION.toUpperCase()} : $_latVer',
+                      '${VERSION.toUpperCase()} : $_latVer ($_latBuildNo)',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10.0),
+                    Divider(color: thirdColor),
                     Text(
                       '${CHANGELOG.toUpperCase()}:',
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
+                        color: secondColor,
                       ),
                     ),
                     ListView.builder(
                       shrinkWrap: true,
+                      padding: const EdgeInsets.all(8.0),
                       itemCount: _changelog.length,
-                      itemBuilder: (ctx, index) =>
-                          Text('• ${_changelog[index]}'),
+                      itemBuilder: (ctx, index) => Text(
+                        '• ${_changelog[index]}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 40.0),
                     CustomRoundedButton(

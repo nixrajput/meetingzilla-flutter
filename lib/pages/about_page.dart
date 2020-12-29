@@ -14,10 +14,10 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   PackageInfo _packageInfo = PackageInfo(
-    appName: '',
-    packageName: '',
-    version: '',
-    buildNumber: '',
+    appName: UNKNOWN,
+    packageName: UNKNOWN,
+    version: UNKNOWN,
+    buildNumber: UNKNOWN,
   );
 
   Future<void> _initPackageInfo() async {
