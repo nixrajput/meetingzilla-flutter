@@ -90,10 +90,10 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                   errorMaxLines: 2,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                 ),
@@ -114,7 +114,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                   _joinChannel(_meetingIdController.text.trim());
                 },
                 title: JOIN_MEETING.toUpperCase(),
-              )
+              ),
             ],
           ),
         ),

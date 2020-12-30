@@ -70,12 +70,21 @@ class _CallViewState extends State<CallView> {
               ),
             ),
             SizedBox(height: 4.0),
-            Text(
-              "${formatMeetingId(widget.authProvider.meetingId)}",
-              style: TextStyle(
-                fontSize: 28.0,
-                fontWeight: FontWeight.bold,
-                color: thirdColor,
+            GestureDetector(
+              onLongPress: () {
+                print(widget.authProvider.meetingId);
+                Fluttertoast.showToast(
+                  msg: "Meeting ID Copied to clipboard.",
+                  gravity: ToastGravity.SNACKBAR,
+                );
+              },
+              child: Text(
+                "${formatMeetingId(widget.authProvider.meetingId)}",
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                  color: secondColor,
+                ),
               ),
             ),
           ],

@@ -6,11 +6,17 @@ class CustomIconButton extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final VoidCallback onTap;
+  final EdgeInsets padding;
+  final double iconSize;
+  final Color bgColor;
 
   const CustomIconButton({
     this.icon,
     this.iconColor,
     this.onTap,
+    this.padding,
+    this.iconSize,
+    this.bgColor,
   });
 
   @override
@@ -18,10 +24,12 @@ class CustomIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        color: bgColor ?? Colors.transparent,
+        padding: padding ?? const EdgeInsets.all(8.0),
         child: FaIcon(
           icon,
           color: iconColor ?? thirdColor,
+          size: iconSize ?? 24.0,
         ),
       ),
     );

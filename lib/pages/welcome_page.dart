@@ -185,10 +185,10 @@ class _WelcomePageState extends State<WelcomePage> {
                   errorMaxLines: 2,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                 ),
@@ -212,10 +212,10 @@ class _WelcomePageState extends State<WelcomePage> {
                   prefixIcon: Icon(Icons.mail_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                 ),
@@ -240,10 +240,10 @@ class _WelcomePageState extends State<WelcomePage> {
                   prefixIcon: Icon(Icons.lock_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                   suffix: GestureDetector(
@@ -280,10 +280,10 @@ class _WelcomePageState extends State<WelcomePage> {
                   prefixIcon: Icon(Icons.lock_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                   suffix: GestureDetector(

@@ -255,10 +255,10 @@ class _LoginPageState extends State<LoginPage> {
                   errorMaxLines: 2,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                 ),
@@ -284,10 +284,10 @@ class _LoginPageState extends State<LoginPage> {
                   errorMaxLines: 2,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
+                      topLeft: Radius.circular(16.0),
                       topRight: Radius.zero,
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20.0),
+                      bottomRight: Radius.circular(16.0),
                     ),
                   ),
                   suffix: GestureDetector(
@@ -317,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: FlatButton(
                   onPressed: () {
-                    _showPasswordResetDialog(context);
+                    _showPasswordResetDialog();
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: Text(
@@ -353,9 +353,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-  _showPasswordResetDialog(BuildContext context) => showDialog(
+  _showPasswordResetDialog() => showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (ctx) => SimpleDialog(
           title: Text(
             "Reset Password",
@@ -366,7 +365,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           titlePadding: const EdgeInsets.only(
             top: 20.0,
-            bottom: 10.0,
+            bottom: 20.0,
             left: 10.0,
             right: 10.0,
           ),
@@ -382,22 +381,70 @@ class _LoginPageState extends State<LoginPage> {
               controller: _emailController,
               decoration: InputDecoration(
                 hintText: EMAIL.toUpperCase(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.zero,
+                    bottomLeft: Radius.zero,
+                    bottomRight: Radius.circular(16.0),
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20.0),
-            RaisedButton(
-              onPressed: () {
-                Navigator.pop(context);
+            GestureDetector(
+              onTap: () async {
+                if (_emailController.text.isNotEmpty &&
+                    _emailController.text != null) {
+                  await FirebaseFunctions.auth
+                      .sendPasswordResetEmail(
+                    email: _emailController.text,
+                  )
+                      .then((value) {
+                    Fluttertoast.showToast(
+                      msg: 'Password reset link has been sent to your email.',
+                      gravity: ToastGravity.SNACKBAR,
+                    );
+                    _emailController.clear();
+                  }).catchError((e) {
+                    Fluttertoast.showToast(
+                      msg: e.toString(),
+                      gravity: ToastGravity.SNACKBAR,
+                    );
+                    print(e.toString());
+                  });
+                }
+                Navigator.pop(ctx);
               },
-              color: Theme.of(context).accentColor,
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              child: Text(
-                NEXT,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  border: Border(
+                    top: BorderSide(
+                      color: Theme.of(context).accentColor,
+                    ),
+                    bottom: BorderSide(
+                      color: Theme.of(context).accentColor,
+                    ),
+                    left: BorderSide(
+                      color: Theme.of(context).accentColor,
+                    ),
+                    right: BorderSide(
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  NEXT,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
             )

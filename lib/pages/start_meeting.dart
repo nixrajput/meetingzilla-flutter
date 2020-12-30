@@ -146,7 +146,7 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
             Text(
               '${formatMeetingId(widget.authProvider.meetingId)}',
               style: TextStyle(
-                color: thirdColor,
+                color: secondColor,
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
