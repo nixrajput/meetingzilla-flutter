@@ -69,14 +69,14 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  BottomSheetButton(
+                  BottomSheetBtn(
                     title: "Camera",
                     icon: Icons.camera,
                     onTap: () async {
                       await _pickImage(ImageSource.camera);
                     },
                   ),
-                  BottomSheetButton(
+                  BottomSheetBtn(
                     title: "Gallery",
                     icon: Icons.photo,
                     onTap: () async {

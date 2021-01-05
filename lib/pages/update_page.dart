@@ -163,7 +163,7 @@ class _UpdatePageState extends State<UpdatePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Divider(color: Theme.of(context).accentColor),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: CHECK_UPDATE,
                 onTap: _checkUpdate,
                 subtitle: _isLoading
@@ -173,11 +173,11 @@ class _UpdatePageState extends State<UpdatePage> {
                       )
                     : SizedBox(),
               ),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: CHANGELOG,
                 onTap: () {},
               ),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: VERSION,
                 subtitle: Text(
                   '${_packageInfo.version ?? '0'} (${_packageInfo.buildNumber ?? '0'})',

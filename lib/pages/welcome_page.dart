@@ -311,7 +311,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
               ),
               SizedBox(height: 40.0),
-              CustomRoundedButton(
+              CustomRoundedBtn(
                 title: NEXT,
                 onTap: _validateAndSave,
               ),

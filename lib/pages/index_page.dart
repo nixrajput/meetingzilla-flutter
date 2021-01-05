@@ -103,7 +103,7 @@ class IndexState extends State<IndexPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CustomIconButton(
+            CustomIconBtn(
               padding: const EdgeInsets.all(16.0),
               icon: FontAwesomeIcons.video,
               iconColor: _currentIndex == 0
@@ -116,7 +116,7 @@ class IndexState extends State<IndexPage> {
                 _bottomTapped(0);
               },
             ),
-            CustomIconButton(
+            CustomIconBtn(
               padding: const EdgeInsets.all(16.0),
               icon: FontAwesomeIcons.calendar,
               iconColor: _currentIndex == 1
@@ -129,7 +129,7 @@ class IndexState extends State<IndexPage> {
                 _bottomTapped(1);
               },
             ),
-            CustomIconButton(
+            CustomIconBtn(
               padding: const EdgeInsets.all(16.0),
               icon: FontAwesomeIcons.solidEnvelope,
               iconColor: _currentIndex == 2
@@ -142,7 +142,7 @@ class IndexState extends State<IndexPage> {
                 _bottomTapped(2);
               },
             ),
-            CustomIconButton(
+            CustomIconBtn(
               padding: const EdgeInsets.all(16.0),
               icon: FontAwesomeIcons.cog,
               iconColor: _currentIndex == 3

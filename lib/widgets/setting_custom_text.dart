@@ -11,7 +11,6 @@ class CustomTextArea extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.only(bottom: 8.0),
       // color: Colors.black.withOpacity(0.1),
       child: Row(
         mainAxisAlignment:
@@ -20,14 +19,14 @@ class CustomTextArea extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
               fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(width: 8.0),
           Text(
             text,
-            style: TextStyle(fontSize: 20.0),
+            style: TextStyle(fontSize: 18.0),
           ),
         ],
       ),

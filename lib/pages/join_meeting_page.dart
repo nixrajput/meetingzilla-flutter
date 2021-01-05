@@ -109,7 +109,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
               SizedBox(height: 20.0),
               _meetingOptions(),
               SizedBox(height: 40.0),
-              CustomRoundedButton(
+              CustomRoundedBtn(
                 onTap: () {
                   _joinChannel(_meetingIdController.text.trim());
                 },

@@ -155,7 +155,7 @@ class _SettingsViewState extends State<SettingsView> {
               ),
               SizedBox(height: 10.0),
               Divider(color: Theme.of(context).accentColor),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: ABOUT,
                 titleColor: thirdColor,
                 icon: Icons.info,
@@ -167,7 +167,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ));
                 },
               ),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: UPDATE,
                 titleColor: thirdColor,
                 icon: Icons.repeat,
@@ -179,13 +179,13 @@ class _SettingsViewState extends State<SettingsView> {
                       ));
                 },
               ),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: LOGOUT,
                 titleColor: Colors.redAccent,
                 icon: Icons.logout,
                 onTap: _logOutUser,
               ),
-              CustomSettingButton(
+              CustomSettingBtn(
                 title: REMOVE_USER,
                 titleColor: Colors.redAccent,
                 icon: Icons.delete_forever,

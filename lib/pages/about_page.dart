@@ -4,6 +4,7 @@ import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_icon_btn.dart';
+import 'package:meetingzilla/widgets/custom_text_btn.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,29 +62,28 @@ class _AboutPageState extends State<AboutPage> {
     );
   }
 
-  Widget _bottomBodyArea(height) => Container(
+  Widget _bottomBodyArea(double height) => Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _versionArea(),
-            _creditsArea(),
+            _versionArea(height),
+            _companyDetails(height),
+            //          _creditsArea(),
             _socialIconLink(),
           ],
         ),
       );
 
-  Widget _versionArea() => Column(
+  Widget _versionArea(double height) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 100.0),
+          SizedBox(height: height * 0.1),
           Image.asset(
             LOCAL_ICON_PATH,
             height: 100.0,
-            width: 100.0,
-            filterQuality: FilterQuality.high,
           ),
           Text(
             _packageInfo.appName ?? 'Loading...',
@@ -96,6 +96,32 @@ class _AboutPageState extends State<AboutPage> {
           Text(
             '${_packageInfo.version ?? '0'} (${_packageInfo.buildNumber ?? '0'})',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+        ],
+      );
+
+  Widget _companyDetails(double height) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Powered by',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Image.asset(
+            COMPANY_ICON_IMAGE_PATH,
+            height: height * 0.2,
+          ),
+          CustomTextBtn(
+            text: 'Credits',
+          ),
+          CustomTextBtn(
+            text: 'Privacy Policy',
+          ),
+          CustomTextBtn(
+            text: 'Terms & Conditions',
           ),
         ],
       );
@@ -139,7 +165,7 @@ class _AboutPageState extends State<AboutPage> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          CustomIconButton(
+          CustomIconBtn(
             icon: FontAwesomeIcons.facebook,
             onTap: () async {
               final url = 'https://facebook.com/nixrajput07';
@@ -154,7 +180,7 @@ class _AboutPageState extends State<AboutPage> {
               }
             },
           ),
-          CustomIconButton(
+          CustomIconBtn(
             icon: FontAwesomeIcons.twitter,
             onTap: () async {
               final url = 'https://twitter.com/nixrajput07';
@@ -169,7 +195,7 @@ class _AboutPageState extends State<AboutPage> {
               }
             },
           ),
-          CustomIconButton(
+          CustomIconBtn(
             icon: FontAwesomeIcons.instagram,
             onTap: () async {
               final url = 'https://instagram.com/nixrajput';
@@ -184,7 +210,7 @@ class _AboutPageState extends State<AboutPage> {
               }
             },
           ),
-          CustomIconButton(
+          CustomIconBtn(
             icon: FontAwesomeIcons.github,
             onTap: () async {
               final url = 'https://github.com/nixrajput';

@@ -24,6 +24,7 @@ dependencies:
   wakelock: ^0.2.1+1
   fluttertoast: ^7.1.6
   get_time_ago: ^0.1.6
+  intl:
 
   device_info: ^1.0.0
   package_info: ^0.4.3+2

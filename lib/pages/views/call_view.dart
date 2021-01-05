@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/join_meeting_page.dart';
 import 'package:meetingzilla/pages/start_meeting.dart';
@@ -9,6 +9,7 @@ import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/utils/util_functions.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_grid_btn.dart';
+import 'package:meetingzilla/widgets/custom_text_btn.dart';
 
 class CallView extends StatefulWidget {
   final AuthProvider authProvider;
@@ -20,6 +21,14 @@ class CallView extends StatefulWidget {
 }
 
 class _CallViewState extends State<CallView> {
+  void _copyMeetingId() async {
+    await Clipboard.setData(ClipboardData(text: widget.authProvider.meetingId));
+    Fluttertoast.showToast(
+      msg: "Meeting ID copied to clipboard.",
+      gravity: ToastGravity.SNACKBAR,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double bodyHeight = MediaQuery.of(context).size.height -
@@ -65,26 +74,28 @@ class _CallViewState extends State<CallView> {
             Text(
               PID_IS,
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(height: 4.0),
             GestureDetector(
-              onLongPress: () {
-                print(widget.authProvider.meetingId);
-                Fluttertoast.showToast(
-                  msg: "Meeting ID Copied to clipboard.",
-                  gravity: ToastGravity.SNACKBAR,
-                );
-              },
-              child: Text(
-                "${formatMeetingId(widget.authProvider.meetingId)}",
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                  color: secondColor,
-                ),
+              onLongPress: _copyMeetingId,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${formatMeetingId(widget.authProvider.meetingId)}",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CustomTextBtn(
+                    onTap: _copyMeetingId,
+                    text: "COPY",
+                  ),
+                ],
               ),
             ),
           ],
@@ -103,7 +114,7 @@ class _CallViewState extends State<CallView> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CustomGridButton(
+                CustomGridBtn(
                   icon: FontAwesomeIcons.video,
                   title: START_MEETING,
                   onTap: () {
@@ -116,7 +127,7 @@ class _CallViewState extends State<CallView> {
                     // _createChannel(_authProvider.channelId);
                   },
                 ),
-                CustomGridButton(
+                CustomGridBtn(
                   icon: FontAwesomeIcons.users,
                   //bgColor: Colors.indigo,
                   title: JOIN_MEETING,
@@ -131,7 +142,7 @@ class _CallViewState extends State<CallView> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CustomGridButton(
+                CustomGridBtn(
                   icon: FontAwesomeIcons.calendarPlus,
                   //bgColor: Colors.deepPurple,
                   title: SCHEDULE,
@@ -142,7 +153,7 @@ class _CallViewState extends State<CallView> {
                     );
                   },
                 ),
-                CustomGridButton(
+                CustomGridBtn(
                   icon: FontAwesomeIcons.shareSquare,
                   title: SCREEN_SHARE,
                   onTap: () {

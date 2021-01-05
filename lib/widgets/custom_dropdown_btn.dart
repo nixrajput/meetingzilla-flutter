@@ -383,8 +383,8 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
   }
 }
 
-class CustomDropdownButton<T> extends StatefulWidget {
-  CustomDropdownButton({
+class CustomDropdownBtn<T> extends StatefulWidget {
+  CustomDropdownBtn({
     Key key,
     @required this.items,
     this.value,
@@ -415,7 +415,7 @@ class CustomDropdownButton<T> extends StatefulWidget {
   _DropdownButtonState<T> createState() => _DropdownButtonState<T>();
 }
 
-class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>
+class _DropdownButtonState<T> extends State<CustomDropdownBtn<T>>
     with WidgetsBindingObserver {
   int _selectedIndex;
   _DropdownRoute<T> _dropdownRoute;
@@ -446,7 +446,7 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>
   }
 
   @override
-  void didUpdateWidget(CustomDropdownButton<T> oldWidget) {
+  void didUpdateWidget(CustomDropdownBtn<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateSelectedIndex();
   }

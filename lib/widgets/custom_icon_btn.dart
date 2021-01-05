@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meetingzilla/constants/colors.dart';
 
-class CustomIconButton extends StatelessWidget {
+class CustomIconBtn extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final VoidCallback onTap;
@@ -10,7 +10,7 @@ class CustomIconButton extends StatelessWidget {
   final double iconSize;
   final Color bgColor;
 
-  const CustomIconButton({
+  const CustomIconBtn({
     this.icon,
     this.iconColor,
     this.onTap,

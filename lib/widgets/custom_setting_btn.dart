@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomSettingButton extends StatelessWidget {
+class CustomSettingBtn extends StatelessWidget {
   final String title;
   final Color titleColor;
   final IconData icon;
@@ -10,7 +10,7 @@ class CustomSettingButton extends StatelessWidget {
   final VoidCallback onTap;
   final Widget subtitle;
 
-  const CustomSettingButton({
+  const CustomSettingBtn({
     this.title,
     this.icon,
     this.onTap,

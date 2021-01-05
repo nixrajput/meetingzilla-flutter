@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class BottomSheetButton extends StatelessWidget {
+class BottomSheetBtn extends StatelessWidget {
   final String title;
   final IconData icon;
   final Function onTap;
 
-  const BottomSheetButton({
+  const BottomSheetBtn({
     this.title,
     this.icon,
     this.onTap,

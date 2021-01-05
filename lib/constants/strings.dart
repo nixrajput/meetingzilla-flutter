@@ -98,3 +98,5 @@ const iconUrl = 'https://github.com/nixrajput/nixlab-inc/blob/master/icon.png';
 const LOCAL_ICON_PATH = '$IMAGE_DIR/icon.png';
 const LOGIN_IMAGE_PATH = '$IMAGE_DIR/login.png';
 const USER_IMAGE_PATH = '$IMAGE_DIR/user.png';
+const ERROR_IMAGE_PATH = '$IMAGE_DIR/error.png';
+const COMPANY_ICON_IMAGE_PATH = '$IMAGE_DIR/comp_logo_trans.png';

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
@@ -6,6 +7,7 @@ import 'package:meetingzilla/pages/index_page.dart';
 import 'package:meetingzilla/pages/login_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
+import 'package:meetingzilla/widgets/custom_border_btn.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 import 'package:package_info/package_info.dart';
@@ -44,6 +46,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   Future<void> _initializeApp() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       setState(() {
@@ -69,19 +74,22 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             if (latVersion > currVer || latBuildNo > currBuildNo) {
               setState(() {
                 _hasUpdate = true;
+                _hasError = false;
                 _downloadUrl = appInfoSnapshot.data()[APP_URL].toString();
                 _changelog = appInfoSnapshot.data()[CHANGELOG.toLowerCase()];
                 _latVer = latVersion;
                 _latBuildNo = latBuildNo;
               });
-            }
-            if (!_hasUpdate && !_isLoading && !_hasError) {
-              _navigateToPage();
+            } else {
+              setState(() {
+                _hasUpdate = false;
+                _hasError = false;
+              });
             }
           } else {
             setState(() {
               _hasError = true;
-              _message = "User data doesn't not exists.";
+              _message = "App information doesn't exists.";
               _isLoading = false;
             });
           }
@@ -90,6 +98,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         setState(() {
           _hasError = true;
           _message = ex.toString();
+          _isLoading = false;
+        });
+      } finally {
+        setState(() {
           _isLoading = false;
         });
       }
@@ -103,6 +115,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       setState(() {
         _isLoading = false;
       });
+    }
+
+    if (!_hasUpdate && !_isLoading && !_hasError) {
+      _navigateToPage();
     }
   }
 
@@ -145,57 +161,117 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
+    final double bodyWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         body: Center(
-      child: _isLoading
-          ? _loadingScreen(bodyHeight)
-          : _hasError
-              ? _errorScreen()
-              : _hasUpdate
-                  ? _updateScreen(bodyHeight)
-                  : _loadingScreen(bodyHeight),
+      child: _buildBody(bodyWidth, bodyHeight),
     ));
   }
 
-  Widget _errorScreen() => Padding(
+  Widget _buildBody(double width, double height) {
+    if (_isLoading && !_hasError && !_hasUpdate) {
+      return _loadingScreen(width, height);
+    }
+    if (_hasError && !_hasUpdate && !_isLoading) {
+      return _errorScreen(width, height);
+    }
+    if (_hasUpdate && !_hasError && !_isLoading) {
+      return _updateScreen(height);
+    }
+    return _loadingScreen(width, height);
+  }
+
+  Widget _errorScreen(double width, double height) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              _message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-              ),
+            Image.asset(
+              ERROR_IMAGE_PATH,
+              width: width * 0.5,
             ),
             SizedBox(height: 40.0),
-            CustomRoundedButton(
+            Text(
+              "An Error Occurred!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (_message != null) SizedBox(height: 40.0),
+            if (_message != null)
+              Text(
+                _message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            SizedBox(height: 40.0),
+            CustomBorderBtn(
+              width: width * 0.25,
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               title: '$RETRY',
               onTap: _initializeApp,
-            ),
+            )
           ],
         ),
       );
 
-  Widget _loadingScreen(bodyHeight) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            LOCAL_ICON_PATH,
-            height: 100.0,
-            width: 100.0,
-            filterQuality: FilterQuality.high,
-          ),
-          SizedBox(height: bodyHeight * 0.1),
-          CustomCircularProgressIndicator(
-            color: Theme.of(context).accentColor,
-          ),
-        ],
+  Widget _loadingScreen(double width, double height) => Container(
+        height: height,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: height * 0.1),
+                Image.asset(
+                  LOCAL_ICON_PATH,
+                  height: 64.0,
+                ),
+                Text(
+                  '$APP_NAME',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomCircularProgressIndicator(
+                  color: Theme.of(context).accentColor,
+                ),
+              ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Powered by',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Image.asset(
+                  COMPANY_ICON_IMAGE_PATH,
+                  height: 80.0,
+                ),
+              ],
+            ),
+          ],
+        ),
       );
 
   Widget _updateScreen(bodyHeight) => Padding(
@@ -262,7 +338,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       ),
                     ),
                     SizedBox(height: 40.0),
-                    CustomRoundedButton(
+                    CustomRoundedBtn(
                       title: '$UPDATE',
                       onTap: _navigateToDownloadUrl,
                     ),

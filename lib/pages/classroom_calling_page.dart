@@ -355,7 +355,7 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BottomBarButton(
+                BottomBarBtn(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -370,7 +370,7 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
                   padding: 8.0,
                   iconColor: Colors.white,
                 ),
-                BottomBarButton(
+                BottomBarBtn(
                   onTap: _onToggleAudioMute,
                   icon:
                       _audioMuted ? Icons.mic_off_outlined : Icons.mic_outlined,
@@ -379,7 +379,7 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
                   padding: 8.0,
                   iconColor: Colors.white,
                 ),
-                BottomBarButton(
+                BottomBarBtn(
                   onTap: _onToggleVideoMute,
                   icon: _videoMuted
                       ? Icons.videocam_off_outlined
@@ -388,7 +388,7 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
                   padding: 8.0,
                   iconColor: Colors.white,
                 ),
-                BottomBarButton(
+                BottomBarBtn(
                   onTap: _onSwitchCamera,
                   icon: Icons.repeat_outlined,
                   iconColor: Colors.white,
@@ -480,17 +480,17 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: Icons.chat_bubble_outline_outlined,
                     title: '$CHAT',
                     onTap: () {},
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: Icons.screen_share_outlined,
                     title: '$SCREEN_SHARE',
                     onTap: () {},
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: Icons.fiber_smart_record_outlined,
                     title: '$RECORD',
                     onTap: () {},
@@ -500,17 +500,17 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: Icons.report_problem_outlined,
                     title: 'Report problem',
                     onTap: () {},
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: Icons.report_outlined,
                     title: 'Report Abuse',
                     onTap: () {},
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: Icons.settings_outlined,
                     title: 'Settings',
                     onTap: () {},

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class BottomBarButton extends StatelessWidget {
+class BottomBarBtn extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;
   final IconData icon;
@@ -11,7 +11,7 @@ class BottomBarButton extends StatelessWidget {
   final double margin;
   final double padding;
 
-  const BottomBarButton({
+  const BottomBarBtn({
     this.onTap,
     this.color,
     @required this.icon,

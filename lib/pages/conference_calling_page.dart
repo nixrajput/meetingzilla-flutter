@@ -7,15 +7,19 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:meetingzilla/constants/colors.dart';
 import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/pages/channel_setting_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
+import 'package:meetingzilla/utils/random_string.dart';
 import 'package:meetingzilla/widgets/bottom_bar_btn.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_text_icon_btn.dart';
 import 'package:meetingzilla/widgets/setting_custom_text.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:wakelock/wakelock.dart';
 
 class ConferenceCallingPage extends StatefulWidget {
@@ -238,7 +242,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
           .collection(PARTICIPANTS.toLowerCase())
           .snapshots(),
       builder: (_, _meetingSnapshots) => Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: materialDarkColor,
         body: _connecting
             ? Center(
                 child: CustomCircularProgressIndicator(
@@ -277,6 +281,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
             _participants.isNotEmpty &&
             _participants.length == 1)
           Container(
+            height: bodyHeight * 0.8,
             child: RtcRemoteView.SurfaceView(uid: _participants[0]),
           ),
         if (_participants != null &&
@@ -470,118 +475,88 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               ),
             ],
           ),
-        _participants.isEmpty
-            ? RtcLocalView.SurfaceView()
-            : Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Draggable(
-                      feedback: GestureDetector(
-                        onDoubleTap: _switchVideoRender,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 16.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(16.0),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 16.0,
-                                offset: Offset.zero,
-                              )
-                            ],
-                          ),
-                          width: 100.0,
-                          height: 120.0,
-                          child: RtcLocalView.SurfaceView(),
-                        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Draggable(
+                feedback: GestureDetector(
+                  onDoubleTap: _switchVideoRender,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16.0),
                       ),
-                      childWhenDragging: SizedBox(),
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 16.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(16.0),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 16.0,
-                              offset: Offset.zero,
-                            )
-                          ],
-                        ),
-                        width: 100.0,
-                        height: 120.0,
-                        child: RtcLocalView.SurfaceView(),
-                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 16.0,
+                          offset: Offset.zero,
+                        )
+                      ],
                     ),
-                    if (_participants.isNotEmpty) _floatingControlBar()
-                  ],
+                    width: 100.0,
+                    height: 120.0,
+                    child: RtcLocalView.SurfaceView(),
+                  ),
+                ),
+                childWhenDragging: SizedBox(),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 16.0,
+                        offset: Offset.zero,
+                      )
+                    ],
+                  ),
+                  width: 100.0,
+                  height: 120.0,
+                  child: RtcLocalView.SurfaceView(),
                 ),
               ),
-        if (_participants.isEmpty)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _floatingControlBar(),
+              _floatingControlBar()
+            ],
           ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 8.0,
+            ),
+            child: Text(
+              widget.meetingId,
+              style: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
       ],
     );
-
-    // if (_switchRender) {
-    //   return Stack(
-    //     children: [
-    //       RtcLocalView.SurfaceView(),
-    //       Align(
-    //         alignment: Alignment.bottomCenter,
-    //         child: Column(
-    //           mainAxisSize: MainAxisSize.min,
-    //           crossAxisAlignment: CrossAxisAlignment.stretch,
-    //           children: [
-    //             if (_participants != null && _participants.isNotEmpty)
-    //               SingleChildScrollView(
-    //                 scrollDirection: Axis.horizontal,
-    //                 child: Padding(
-    //                   padding: const EdgeInsets.only(left: 8.0),
-    //                   child: Row(
-    //                     children:
-    //                         List.of(_participants.map((uid) => GestureDetector(
-    //                               onDoubleTap: _maximizeVideo,
-    //                               child: Draggable(
-    //                                 feedback: _floatingVideoCard(uid),
-    //                                 child: _floatingVideoCard(uid),
-    //                                 childWhenDragging: Container(),
-    //                               ),
-    //                             ))),
-    //                   ),
-    //                 ),
-    //               ),
-    //             _floatingControlBar(),
-    //           ],
-    //         ),
-    //       ),
-    //     ],
-    //   );
-    // } else {
-    //
-    // }
   }
 
   Widget _expandedVideo(Widget child) {
     return Expanded(
       child: Container(
-        // decoration: BoxDecoration(
-        //   border: Border(
-        //     top: BorderSide(color: Colors.white),
-        //     bottom: BorderSide(color: Colors.white),
-        //     left: BorderSide(color: Colors.white),
-        //     right: BorderSide(color: Colors.white),
-        //   ),
-        // ),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.white),
+            bottom: BorderSide(color: Colors.white),
+            left: BorderSide(color: Colors.white),
+            right: BorderSide(color: Colors.white),
+          ),
+        ),
         child: child,
       ),
     );
@@ -600,30 +575,30 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
-            BottomBarButton(
+            BottomBarBtn(
               onTap: () => _leaveChannel(context),
               icon: FontAwesomeIcons.times,
               color: Colors.red,
               borderColor: Colors.red,
               padding: 20.0,
             ),
-            // BottomBarButton(
-            //   onTap: () {
-            //     // Navigator.push(
-            //     //   context,
-            //     //   MaterialPageRoute(
-            //     //     builder: (_) => ParticipantsPage(
-            //     //       users: _participants,
-            //     //     ),
-            //     //   ),
-            //     // );
-            //     setState(() {
-            //       _participants.add(randomIntNumeric(8));
-            //     });
-            //   },
-            //   icon: FontAwesomeIcons.users,
-            // ),
-            BottomBarButton(
+            BottomBarBtn(
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) => ParticipantsPage(
+                //       users: _participants,
+                //     ),
+                //   ),
+                // );
+                setState(() {
+                  _participants.add(randomIntNumeric(8));
+                });
+              },
+              icon: FontAwesomeIcons.users,
+            ),
+            BottomBarBtn(
               onTap: _onToggleAudioMute,
               icon: _micToggle
                   ? FontAwesomeIcons.microphoneSlash
@@ -631,7 +606,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               color: _micToggle ? Colors.red : Colors.transparent,
               borderColor: _micToggle ? Colors.red : Colors.white,
             ),
-            BottomBarButton(
+            BottomBarBtn(
               onTap: _onToggleVideoMute,
               icon: _cameraToggle
                   ? FontAwesomeIcons.videoSlash
@@ -639,7 +614,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
               color: _cameraToggle ? Colors.red : Colors.transparent,
               borderColor: _cameraToggle ? Colors.red : Colors.white,
             ),
-            BottomBarButton(
+            BottomBarBtn(
               onTap: () => _showMoreOptionsBottomSheet(context),
               icon: FontAwesomeIcons.ellipsisH,
             ),
@@ -664,17 +639,17 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 10.0),
+              SizedBox(height: 8.0),
               Text(
                 MEETING_DETAILS,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).accentColor,
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               CustomTextArea(
                 title: '$MEETING_ID :',
                 text: '${widget.meetingId}',
@@ -712,21 +687,10 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 10.0),
-              Text(
-                '$MORE_OPTIONS',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).accentColor,
-                ),
-              ),
-              SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: FontAwesomeIcons.infoCircle,
                     iconColor: Theme.of(context).accentColor,
                     title: 'View Info',
@@ -734,36 +698,37 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
                       _showDetailsBottomSheet(ctx);
                     },
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: FontAwesomeIcons.exchangeAlt,
                     iconColor: Theme.of(context).accentColor,
                     title: 'Switch Camera',
                     onTap: _onSwitchCamera,
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: FontAwesomeIcons.shareAlt,
                     iconColor: Theme.of(context).accentColor,
                     title: 'Invite',
-                    onTap: () {},
+                    onTap: () => _shareMeetingDetails(context),
                   ),
                 ],
               ),
+              SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: FontAwesomeIcons.chromecast,
                     iconColor: Theme.of(context).accentColor,
                     title: 'Screen Share',
                     onTap: () {},
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: FontAwesomeIcons.bug,
                     iconColor: Theme.of(context).accentColor,
                     title: 'Report',
                     onTap: () {},
                   ),
-                  CustomTextIconButton(
+                  CustomTextIconBtn(
                     icon: FontAwesomeIcons.cog,
                     iconColor: Theme.of(context).accentColor,
                     title: 'Settings',
@@ -798,6 +763,25 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
       _micToggle = !_micToggle;
     });
     _engine?.muteLocalAudioStream(_micToggle);
+  }
+
+  void _shareMeetingDetails(BuildContext context) async {
+    final RenderBox renderBox = context.findRenderObject();
+
+    String subject = '${_authProvider.userSnapshot.data()[NAME]} '
+        'is inviting you to a meeting.';
+
+    String body = '$subject \n\n'
+        'Topic : Meeting Topic \n'
+        'Time : ${DateFormat('E, yyyy-mm-dd HH:mm a').format(DateTime.now())} \n\n'
+        'Meeting ID : ${widget.meetingId} \n'
+        'Passcode : \n'
+        'Host : ${_authProvider.userSnapshot.data()[NAME]}';
+
+    await Share.share(body,
+        subject: subject,
+        sharePositionOrigin:
+            renderBox.localToGlobal(Offset.zero) & renderBox.size);
   }
 
   // void _onToggleAllRemoteAudioMute() {

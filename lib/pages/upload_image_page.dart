@@ -139,7 +139,7 @@ class _UploadImagePageState extends State<UploadImagePage>
               if (_imageFile != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: CustomRoundedButton(
+                  child: CustomRoundedBtn(
                     title: UPLOAD.toUpperCase(),
                     onTap: _uploadImage,
                   ),
@@ -248,7 +248,7 @@ class _UploadImagePageState extends State<UploadImagePage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            CustomSettingButton(
+            CustomSettingBtn(
               bgColor: Colors.transparent,
               icon: FontAwesomeIcons.camera,
               title: CAMERA,
@@ -258,7 +258,7 @@ class _UploadImagePageState extends State<UploadImagePage>
               },
             ),
             SizedBox(height: 8.0),
-            CustomSettingButton(
+            CustomSettingBtn(
               bgColor: Colors.transparent,
               icon: FontAwesomeIcons.images,
               title: GALLERY,

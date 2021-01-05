@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetingzilla/constants/colors.dart';
 
-class CustomRoundedButton extends StatelessWidget {
+class CustomRoundedBtn extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
   final double borderRadius;
@@ -10,8 +10,9 @@ class CustomRoundedButton extends StatelessWidget {
   final double fontSize;
   final Color startColor;
   final Color endColor;
+  final double width;
 
-  const CustomRoundedButton({
+  const CustomRoundedBtn({
     @required this.title,
     @required this.onTap,
     this.borderRadius,
@@ -20,6 +21,7 @@ class CustomRoundedButton extends StatelessWidget {
     this.fontSize,
     this.startColor,
     this.endColor,
+    this.width,
   });
 
   @override
@@ -27,7 +29,7 @@ class CustomRoundedButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: double.infinity,
+        width: width ?? double.infinity,
         padding: padding ?? const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 16.0)),

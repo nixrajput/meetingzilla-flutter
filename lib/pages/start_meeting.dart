@@ -227,7 +227,7 @@ class _StartMeetingPageState extends State<StartMeetingPage> {
 
   Container _meetingButton() => Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: CustomRoundedButton(
+        child: CustomRoundedBtn(
           onTap: () {
             _createChannel();
           },
