@@ -39,7 +39,7 @@ class _WelcomePageState extends State<WelcomePage> {
         _passwordController.text,
       ).catchError((e) {
         var err = e.toString();
-        print('$ERROR_OCCUR $err.');
+        print('$ERROR_OCCUR_WARNING $err.');
         setState(() {
           _isLoading = false;
         });
@@ -61,8 +61,8 @@ class _WelcomePageState extends State<WelcomePage> {
             EMAIL: _emailController.text,
             TIMESTAMP: DateTime.now(),
           }).then((_) async {
-            print("$REGISTER_SUCCESS");
-            Fluttertoast.showToast(msg: '$REGISTER_SUCCESS');
+            print("$REGISTER_SUCCESS_WARNING");
+            Fluttertoast.showToast(msg: '$REGISTER_SUCCESS_WARNING');
             setState(() {
               _isLoading = false;
             });
@@ -180,17 +180,9 @@ class _WelcomePageState extends State<WelcomePage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: _nameController,
                 decoration: InputDecoration(
-                  labelText: NAME.toUpperCase(),
+                  labelText: "${NAME.toUpperCase()}",
                   prefixIcon: Icon(Icons.person_rounded),
                   errorMaxLines: 2,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -208,16 +200,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: EMAIL.toUpperCase(),
+                  labelText: "${EMAIL.toUpperCase()}",
                   prefixIcon: Icon(Icons.mail_rounded),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -236,16 +220,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 controller: _passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
-                  labelText: PASSWORD.toUpperCase(),
+                  labelText: "CREATE ${PASSWORD.toUpperCase()}",
                   prefixIcon: Icon(Icons.lock_rounded),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                   suffix: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -278,14 +254,6 @@ class _WelcomePageState extends State<WelcomePage> {
                 decoration: InputDecoration(
                   labelText: CONFIRM_PASSWORD.toUpperCase(),
                   prefixIcon: Icon(Icons.lock_rounded),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                   suffix: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -313,6 +281,7 @@ class _WelcomePageState extends State<WelcomePage> {
               SizedBox(height: 40.0),
               CustomRoundedBtn(
                 title: NEXT,
+                titleColor: Colors.white,
                 onTap: _validateAndSave,
               ),
               SizedBox(height: 20.0),

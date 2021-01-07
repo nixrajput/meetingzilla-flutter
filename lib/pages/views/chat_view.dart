@@ -19,7 +19,6 @@ class _ChatViewState extends State<ChatView> {
             CustomAppBar(
               title: CHATS,
               titleSize: bodyHeight * 0.04,
-              titleColor: Theme.of(context).accentColor,
             ),
             //Expanded(child: _bottomBodyArea(bodyHeight)),
           ],

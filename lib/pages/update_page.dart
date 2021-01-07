@@ -49,7 +49,7 @@ class _UpdatePageState extends State<UpdatePage> {
       try {
         await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
           if (appInfoSnapshot.exists) {
-            final String latver = appInfoSnapshot.data()[LATEST_VER];
+            final String latver = appInfoSnapshot.data()[LATEST_VERSION];
             final int latBuildNo =
                 appInfoSnapshot.data()['latest_build_number'];
             int major = int.parse(_packageInfo.version.substring(0, 1));
@@ -162,7 +162,7 @@ class _UpdatePageState extends State<UpdatePage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Divider(color: Theme.of(context).accentColor),
+              SizedBox(height: 20.0),
               CustomSettingBtn(
                 title: CHECK_UPDATE,
                 onTap: _checkUpdate,
@@ -189,7 +189,6 @@ class _UpdatePageState extends State<UpdatePage> {
                 ),
                 onTap: () {},
               ),
-              Divider(color: Theme.of(context).accentColor),
             ],
           ),
         ),

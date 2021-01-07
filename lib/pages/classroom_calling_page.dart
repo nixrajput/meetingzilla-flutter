@@ -11,7 +11,7 @@ import 'package:meetingzilla/pages/participants_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/widgets/bottom_bar_btn.dart';
 import 'package:meetingzilla/widgets/custom_text_icon_btn.dart';
-import 'package:meetingzilla/widgets/setting_custom_text.dart';
+import 'package:meetingzilla/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -102,7 +102,7 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
             _infoStrings.add(info);
           });
           Fluttertoast.showToast(
-            msg: '$ERROR_OCCUR: $code.',
+            msg: '$ERROR_OCCUR_WARNING: $code.',
             gravity: ToastGravity.TOP,
           );
         },
@@ -156,13 +156,13 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
           );
         },
         connectionLost: () {
-          final info = CONN_LOST;
+          final info = CONN_LOST_WARNING;
           print(info);
           setState(() {
             _infoStrings.add(info);
           });
           Fluttertoast.showToast(
-            msg: CONN_LOST,
+            msg: CONN_LOST_WARNING,
             gravity: ToastGravity.TOP,
           );
         },
@@ -429,20 +429,17 @@ class _ClassroomCallingPageState extends State<ClassroomCallingPage> {
                 ),
               ),
               SizedBox(height: 20.0),
-              CustomTextArea(
+              CustomTextWidget(
                 title: '${MEETING_ID.toUpperCase()} :',
                 text: '${widget.channelName}',
-                centerText: true,
               ),
-              CustomTextArea(
+              CustomTextWidget(
                 title: '${YOUR_ID.toUpperCase()} :',
                 text: '$_uid',
-                centerText: true,
               ),
-              CustomTextArea(
+              CustomTextWidget(
                 title: '$TOTAL $PARTICIPANTS :'.toUpperCase(),
                 text: '${_users.length}',
-                centerText: true,
               ),
             ],
           ),

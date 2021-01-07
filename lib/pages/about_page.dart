@@ -5,6 +5,7 @@ import 'package:meetingzilla/constants/strings.dart';
 import 'package:meetingzilla/widgets/custom_app_bar.dart';
 import 'package:meetingzilla/widgets/custom_icon_btn.dart';
 import 'package:meetingzilla/widgets/custom_text_btn.dart';
+import 'package:meetingzilla/widgets/custom_text_widget.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -62,17 +63,17 @@ class _AboutPageState extends State<AboutPage> {
     );
   }
 
-  Widget _bottomBodyArea(double height) => Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _versionArea(height),
-            _companyDetails(height),
-            //          _creditsArea(),
-            _socialIconLink(),
-          ],
+  Widget _bottomBodyArea(double height) => SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              _versionArea(height),
+              SizedBox(height: height * 0.1),
+              _companyDetails(height),
+              SizedBox(height: height * 0.1),
+              _socialIconLink(),
+            ],
+          ),
         ),
       );
 
@@ -86,7 +87,7 @@ class _AboutPageState extends State<AboutPage> {
             height: 100.0,
           ),
           Text(
-            _packageInfo.appName ?? 'Loading...',
+            _packageInfo.appName ?? '$LOADING...',
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -104,61 +105,90 @@ class _AboutPageState extends State<AboutPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Powered by',
+            '$POWERED $BY',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 10.0),
           Image.asset(
             COMPANY_ICON_IMAGE_PATH,
-            height: height * 0.2,
+            height: height * 0.1,
+          ),
+          SizedBox(height: height * 0.05),
+          CustomTextBtn(
+            text: '$CREDITS',
+            onTap: () => _showCreditsBottomSheet(context),
           ),
           CustomTextBtn(
-            text: 'Credits',
+            text: '$PRIVACY_POLICY',
+            onTap: () => _navigateToUrl(PRIVACY_POLICY_URL),
           ),
           CustomTextBtn(
-            text: 'Privacy Policy',
-          ),
-          CustomTextBtn(
-            text: 'Terms & Conditions',
+            text: '$TERMS_CONDITIONS',
           ),
         ],
       );
 
-  Widget _creditsArea() => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Credits',
-            style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: secondColor),
+  void _navigateToUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+      ).catchError((err) {
+        print(err.toString());
+      });
+    }
+  }
+
+  _showCreditsBottomSheet(BuildContext ctx) => showModalBottomSheet(
+        context: ctx,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
           ),
-          SizedBox(height: 10.0),
-          Text(
-            'Developer : Nikhil Kumar',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+        ),
+        builder: (ctx) => Container(
+          margin: const EdgeInsets.only(
+            top: 20.0,
+            bottom: 20.0,
+          ),
+          child: _creditsArea(),
+        ),
+      );
+
+  Widget _creditsArea() => SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              CREDITS,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: secondColor),
             ),
-          ),
-          SizedBox(height: 10.0),
-          Text(
-            'UI/UX : Nikhil Kumar',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+            SizedBox(height: 10.0),
+            CustomTextWidget(
+              title: '${LEAD.toUpperCase()} ${DEV.toUpperCase()} :',
+              text: '$NIKHIL $KUMAR',
             ),
-          ),
-          SizedBox(height: 10.0),
-          Text(
-            'App Name : Diwakar Chaubey',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+            CustomTextWidget(
+              title: '${UI_UX.toUpperCase()} ${DEV.toUpperCase()} :',
+              text: '$NIKHIL $KUMAR',
             ),
-          ),
-        ],
+            CustomTextWidget(
+              title: '${APP.toUpperCase()} ${NAME.toUpperCase()} :',
+              text: '$DIWAKAR $CHAUBEY',
+            ),
+          ],
+        ),
       );
 
   Widget _socialIconLink() => Row(
@@ -167,63 +197,19 @@ class _AboutPageState extends State<AboutPage> {
         children: [
           CustomIconBtn(
             icon: FontAwesomeIcons.facebook,
-            onTap: () async {
-              final url = 'https://facebook.com/nixrajput07';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: true,
-                  forceWebView: true,
-                  enableJavaScript: true,
-                  statusBarBrightness: Brightness.light,
-                );
-              }
-            },
+            onTap: () => _navigateToUrl(DEV_FACEBOOK_LINK),
           ),
           CustomIconBtn(
             icon: FontAwesomeIcons.twitter,
-            onTap: () async {
-              final url = 'https://twitter.com/nixrajput07';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: true,
-                  forceWebView: true,
-                  enableJavaScript: true,
-                  statusBarBrightness: Brightness.light,
-                );
-              }
-            },
+            onTap: () => _navigateToUrl(DEV_TWITTER_LINK),
           ),
           CustomIconBtn(
             icon: FontAwesomeIcons.instagram,
-            onTap: () async {
-              final url = 'https://instagram.com/nixrajput';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: true,
-                  forceWebView: true,
-                  enableJavaScript: true,
-                  statusBarBrightness: Brightness.light,
-                );
-              }
-            },
+            onTap: () => _navigateToUrl(DEV_INSTA_LINK),
           ),
           CustomIconBtn(
             icon: FontAwesomeIcons.github,
-            onTap: () async {
-              final url = 'https://github.com/nixrajput';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: true,
-                  forceWebView: true,
-                  enableJavaScript: true,
-                  statusBarBrightness: Brightness.light,
-                );
-              }
-            },
+            onTap: () => _navigateToUrl(DEV_GITHUB_LINK),
           ),
         ],
       );

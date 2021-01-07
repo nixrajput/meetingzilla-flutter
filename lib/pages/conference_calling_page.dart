@@ -17,7 +17,7 @@ import 'package:meetingzilla/utils/random_string.dart';
 import 'package:meetingzilla/widgets/bottom_bar_btn.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_text_icon_btn.dart';
-import 'package:meetingzilla/widgets/setting_custom_text.dart';
+import 'package:meetingzilla/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:wakelock/wakelock.dart';
@@ -110,7 +110,7 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
           final info = 'onError: $code';
           print(info);
           Fluttertoast.showToast(
-            msg: '$ERROR_OCCUR: $code.',
+            msg: '$ERROR_OCCUR_WARNING: $code.',
             gravity: ToastGravity.TOP,
           );
         },
@@ -156,11 +156,11 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
           });
         },
         connectionLost: () {
-          final info = CONN_LOST;
+          final info = CONN_LOST_WARNING;
           print(info);
 
           Fluttertoast.showToast(
-            msg: CONN_LOST,
+            msg: CONN_LOST_WARNING,
             gravity: ToastGravity.TOP,
           );
         },
@@ -632,14 +632,12 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
         ),
         builder: (ctx) => Container(
           padding: const EdgeInsets.only(
-            top: 10.0,
-            bottom: 10.0,
+            top: 20.0,
+            bottom: 20.0,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 8.0),
               Text(
                 MEETING_DETAILS,
                 textAlign: TextAlign.center,
@@ -650,20 +648,17 @@ class _ConferenceCallingPageState extends State<ConferenceCallingPage> {
                 ),
               ),
               SizedBox(height: 10.0),
-              CustomTextArea(
+              CustomTextWidget(
                 title: '$MEETING_ID :',
                 text: '${widget.meetingId}',
-                centerText: true,
               ),
-              CustomTextArea(
+              CustomTextWidget(
                 title: '$YOUR_ID :',
                 text: '$_uid',
-                centerText: true,
               ),
-              CustomTextArea(
+              CustomTextWidget(
                 title: '$TOTAL $PARTICIPANTS :',
                 text: '${_participants.length + 1}',
-                centerText: true,
               ),
             ],
           ),

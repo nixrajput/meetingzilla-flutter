@@ -19,7 +19,6 @@ class _ContactViewState extends State<ContactView> {
             CustomAppBar(
               title: MEETINGS,
               titleSize: bodyHeight * 0.04,
-              titleColor: Theme.of(context).accentColor,
             ),
             //Expanded(child: _bottomBodyArea(bodyHeight)),
           ],

@@ -82,20 +82,9 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                 keyboardType: TextInputType.number,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: _meetingIdController,
-                inputFormatters: [
-                  // MeetingIdFormatter(mask: "xxx xxx xxxx", separator: " "),
-                ],
                 decoration: InputDecoration(
                   labelText: MEETING_ID.toUpperCase(),
                   errorMaxLines: 2,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -111,9 +100,10 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
               SizedBox(height: 40.0),
               CustomRoundedBtn(
                 onTap: () {
-                  _joinChannel(_meetingIdController.text.trim());
+                  _joinChannel(_meetingIdController.text);
                 },
                 title: JOIN_MEETING.toUpperCase(),
+                titleColor: Colors.white,
               ),
             ],
           ),

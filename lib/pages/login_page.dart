@@ -8,6 +8,7 @@ import 'package:meetingzilla/pages/welcome_page.dart';
 import 'package:meetingzilla/providers/auth_provider.dart';
 import 'package:meetingzilla/repository/firebase_functions.dart';
 import 'package:meetingzilla/utils/validators.dart';
+import 'package:meetingzilla/widgets/custom_border_btn.dart';
 import 'package:meetingzilla/widgets/custom_circular_progress.dart';
 import 'package:meetingzilla/widgets/custom_rounded_btn.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         _passwordController.text,
       ).catchError((e) {
         var err = e.toString();
-        print('$ERROR_OCCUR $err.');
+        print('$ERROR_OCCUR_WARNING $err.');
         setState(() {
           _isLoading = false;
         });
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
               _authProvider.userSnapshot.data()[USER_ID],
             )
                 .then((_) async {
-              Fluttertoast.showToast(msg: '$LOGIN_SUCCESS');
+              Fluttertoast.showToast(msg: '$LOGIN_SUCCESS_WARNING');
               await _authProvider.checkUserInfo();
               _moveToHomePage();
             });
@@ -253,14 +254,6 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: EMAIL.toUpperCase(),
                   prefixIcon: Icon(Icons.mail_rounded),
                   errorMaxLines: 2,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -282,14 +275,6 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: PASSWORD.toUpperCase(),
                   prefixIcon: Icon(Icons.lock_rounded),
                   errorMaxLines: 2,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.zero,
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(16.0),
-                    ),
-                  ),
                   suffix: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -333,6 +318,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 40.0),
               CustomRoundedBtn(
                 title: NEXT,
+                titleColor: Colors.white,
                 onTap: _validateAndLogin,
               ),
               SizedBox(height: 20.0),
@@ -355,6 +341,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _showPasswordResetDialog() => showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (ctx) => SimpleDialog(
           title: Text(
             "Reset Password",
@@ -380,19 +367,13 @@ class _LoginPageState extends State<LoginPage> {
               keyboardType: TextInputType.emailAddress,
               controller: _emailController,
               decoration: InputDecoration(
-                hintText: EMAIL.toUpperCase(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16.0),
-                    topRight: Radius.zero,
-                    bottomLeft: Radius.zero,
-                    bottomRight: Radius.circular(16.0),
-                  ),
-                ),
+                hintText: "ENTER ${EMAIL.toUpperCase()}",
               ),
             ),
-            SizedBox(height: 20.0),
-            GestureDetector(
+            SizedBox(height: 32.0),
+            CustomBorderBtn(
+              title: NEXT,
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               onTap: () async {
                 if (_emailController.text.isNotEmpty &&
                     _emailController.text != null) {
@@ -413,41 +394,12 @@ class _LoginPageState extends State<LoginPage> {
                     );
                     print(e.toString());
                   });
+                } else {
+                  Fluttertoast.showToast(msg: "Email ID is empty.");
                 }
                 Navigator.pop(ctx);
               },
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  border: Border(
-                    top: BorderSide(
-                      color: Theme.of(context).accentColor,
-                    ),
-                    bottom: BorderSide(
-                      color: Theme.of(context).accentColor,
-                    ),
-                    left: BorderSide(
-                      color: Theme.of(context).accentColor,
-                    ),
-                    right: BorderSide(
-                      color: Theme.of(context).accentColor,
-                    ),
-                  ),
-                ),
-                child: Text(
-                  NEXT,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).accentColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            )
+            ),
           ],
         ),
       );

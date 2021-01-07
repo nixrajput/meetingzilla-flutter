@@ -99,7 +99,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                       children: [
                         RoundedNetworkImage(
                           imageSize: 40.0,
-                          imageUrl: iconUrl,
+                          imageUrl: '',
                           strokeWidth: 0.0,
                           strokeColor: Colors.transparent,
                         ),

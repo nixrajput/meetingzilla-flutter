@@ -40,7 +40,6 @@ class _CallViewState extends State<CallView> {
           CustomAppBar(
             title: APP_NAME,
             titleSize: bodyHeight * 0.04,
-            titleColor: Theme.of(context).accentColor,
           ),
           _body(bodyHeight),
         ],

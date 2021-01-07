@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   var _downloadUrl;
   var _latVer;
   var _latBuildNo;
-  List<dynamic> _changelog;
+  List<dynamic> _changelog = [];
   PackageInfo _packageInfo = PackageInfo(
     appName: UNKNOWN,
     packageName: UNKNOWN,
@@ -58,16 +58,15 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       try {
         await FirebaseFunctions.getAppInfo().then((appInfoSnapshot) {
           if (appInfoSnapshot.exists) {
-            final String latVer = appInfoSnapshot.data()[LATEST_VER];
-            final int latBuildNo =
-                appInfoSnapshot.data()['latest_build_number'];
+            final String latVer = appInfoSnapshot.data()[LATEST_VERSION];
+            final int latBuildNo = appInfoSnapshot.data()['$LATEST_BUILD_NO'];
             int major = int.parse(_packageInfo.version.substring(0, 1));
             int minor = int.parse(_packageInfo.version.substring(2, 3));
             int patch = int.parse(
                 _packageInfo.version.substring(4, _packageInfo.version.length));
             int currBuildNo = int.parse(_packageInfo.buildNumber);
-            print('$VERSION : $major.$minor.$patch');
-            print('LATEST $VERSION: $latVer');
+            print('${VERSION.toUpperCase()} : $major.$minor.$patch');
+            print('${LATEST.toUpperCase()} ${VERSION.toUpperCase()} : $latVer');
             final Version currVer = Version(major, minor, patch);
             final Version latVersion = Version.parse(latVer);
 
@@ -89,7 +88,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           } else {
             setState(() {
               _hasError = true;
-              _message = "App information doesn't exists.";
+              _message = '$APP_INFO_EMPTY_WARNING';
               _isLoading = false;
             });
           }
@@ -162,10 +161,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     final bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
     final double bodyWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: Center(
-      child: _buildBody(bodyWidth, bodyHeight),
-    ));
+    return Scaffold(body: SafeArea(child: _buildBody(bodyWidth, bodyHeight)));
   }
 
   Widget _buildBody(double width, double height) {
@@ -181,42 +177,48 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     return _loadingScreen(width, height);
   }
 
-  Widget _errorScreen(double width, double height) => Padding(
+  Widget _errorScreen(double width, double height) => Container(
+        width: double.infinity,
+        height: height,
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              ERROR_IMAGE_PATH,
-              width: width * 0.5,
-            ),
-            SizedBox(height: 40.0),
-            Text(
-              "An Error Occurred!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (_message != null) SizedBox(height: 40.0),
-            if (_message != null)
-              Text(
-                _message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16.0,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: height * 0.1),
+              Padding(
+                padding: EdgeInsets.only(left: width * 0.3),
+                child: Image.asset(
+                  ERROR_IMAGE_PATH,
+                  width: width * 0.5,
                 ),
               ),
-            SizedBox(height: 40.0),
-            CustomBorderBtn(
-              width: width * 0.25,
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              title: '$RETRY',
-              onTap: _initializeApp,
-            )
-          ],
+              SizedBox(height: height * 0.2),
+              Text(
+                '$ERROR_OCCUR_WARNING',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (_message != null) SizedBox(height: height * 0.05),
+              if (_message != null)
+                Text(
+                  _message,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              SizedBox(height: height * 0.1),
+              CustomBorderBtn(
+                width: width * 0.25,
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                title: '$RETRY',
+                onTap: _initializeApp,
+              )
+            ],
+          ),
         ),
       );
 
@@ -257,13 +259,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Powered by',
+                  '$POWERED $BY',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(height: 10.0),
                 Image.asset(
                   COMPANY_ICON_IMAGE_PATH,
                   height: 80.0,
@@ -274,7 +277,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         ),
       );
 
-  Widget _updateScreen(bodyHeight) => Padding(
+  Widget _updateScreen(bodyHeight) => Container(
+        height: bodyHeight,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -286,7 +290,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               ),
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: darkBottomBarColor,
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   boxShadow: [
                     BoxShadow(
@@ -317,7 +321,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Divider(color: thirdColor),
+                    Divider(color: Theme.of(context).accentColor),
                     Text(
                       '${CHANGELOG.toUpperCase()}:',
                       style: TextStyle(
@@ -326,17 +330,18 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                         color: secondColor,
                       ),
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(8.0),
-                      itemCount: _changelog.length,
-                      itemBuilder: (ctx, index) => Text(
-                        '• ${_changelog[index]}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                    if (_changelog != null && _changelog.isNotEmpty)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8.0),
+                        itemCount: _changelog.length,
+                        itemBuilder: (ctx, index) => Text(
+                          '• ${_changelog[index]}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
                     SizedBox(height: 40.0),
                     CustomRoundedBtn(
                       title: '$UPDATE',
